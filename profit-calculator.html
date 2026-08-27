@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商利润计算器</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #222;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f0f4f8;
+            border-radius: 12px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .profit {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💰 电商利润计算器</h1>
+
+    <div class="input-group">
+        <label>商品售价（元）</label>
+        <input type="number" id="price" value="99">
+    </div>
+
+    <div class="input-group">
+        <label>采购成本（元）</label>
+        <input type="number" id="cost" value="35">
+    </div>
+
+    <div class="input-group">
+        <label>平台佣金（%）</label>
+        <input type="number" id="commission" value="5">
+    </div>
+
+    <div class="input-group">
+        <label>广告费用（元）</label>
+        <input type="number" id="adCost" value="10">
+    </div>
+
+    <div class="input-group">
+        <label>物流成本（元）</label>
+        <input type="number" id="shipping" value="8">
+    </div>
+
+    <div class="input-group">
+        <label>其他成本（元）</label>
+        <input type="number" id="otherCost" value="2">
+    </div>
+
+    <button onclick="calculateProfit()">计算利润</button>
+
+    <div class="result">
+
+        <div class="result-row">
+            <span>平台佣金</span>
+            <span id="commissionResult">¥0.00</span>
+        </div>
+
+        <div class="result-row">
+            <span>总成本</span>
+            <span id="totalCost">¥0.00</span>
+        </div>
+
+        <div class="result-row">
+            <span>实际利润</span>
+            <span class="profit" id="profit">¥0.00</span>
+        </div>
+
+        <div class="result-row">
+            <span>利润率</span>
+            <span id="margin">0%</span>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function calculateProfit() {
+
+    const price = Number(document.getElementById("price").value);
+    const cost = Number(document.getElementById("cost").value);
+    const commissionRate = Number(document.getElementById("commission").value);
+    const adCost = Number(document.getElementById("adCost").value);
+    const shipping = Number(document.getElementById("shipping").value);
+    const otherCost = Number(document.getElementById("otherCost").value);
+
+    const commission = price * commissionRate / 100;
+
+    const totalCost =
+        cost +
+        commission +
+        adCost +
+        shipping +
+        otherCost;
+
+    const profit = price - totalCost;
+
+    const margin = price === 0
+        ? 0
+        : profit / price * 100;
+
+    document.getElementById("commissionResult").textContent =
+        "¥" + commission.toFixed(2);
+
+    document.getElementById("totalCost").textContent =
+        "¥" + totalCost.toFixed(2);
+
+    document.getElementById("profit").textContent =
+        "¥" + profit.toFixed(2);
+
+    document.getElementById("margin").textContent =
+        margin.toFixed(2) + "%";
+}
+
+calculateProfit();
+</script>
+
+</body>
+</html>
