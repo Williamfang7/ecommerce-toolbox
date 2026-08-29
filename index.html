@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>电商利润计算器</title>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -28,7 +30,7 @@
 
         h1 {
             text-align: center;
-            margin-bottom: 30px;
+            margin: 0 0 30px;
         }
 
         .input-group {
@@ -49,6 +51,11 @@
             font-size: 16px;
         }
 
+        input:focus {
+            outline: none;
+            border-color: #222;
+        }
+
         button {
             width: 100%;
             padding: 14px;
@@ -61,6 +68,10 @@
             cursor: pointer;
         }
 
+        button:hover {
+            background: #444;
+        }
+
         .result {
             margin-top: 25px;
             padding: 20px;
@@ -71,67 +82,143 @@
         .result-row {
             display: flex;
             justify-content: space-between;
-            margin: 10px 0;
+            align-items: center;
+            gap: 20px;
+            margin: 12px 0;
         }
 
         .profit {
             font-size: 24px;
             font-weight: bold;
         }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #d9dee5;
+            margin: 16px 0;
+        }
+
+        /* =========================
+           盈利诊断
+        ========================= */
+
         .diagnosis {
-    margin-top: 20px;
-    padding: 20px;
-    background: #fafafa;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-}
+            margin-top: 20px;
+            padding: 20px;
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
 
-.diagnosis h2 {
-    margin: 0 0 15px;
-    font-size: 20px;
-}
+        .diagnosis h2 {
+            margin: 0 0 15px;
+            font-size: 20px;
+        }
 
-.diagnosis-status {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
+        .diagnosis-status {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
 
-.diagnosis-text {
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 12px;
-}
+        .diagnosis-text {
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 12px;
+        }
 
-.diagnosis-advice {
-    line-height: 1.8;
-    color: #333;
-}
+        .diagnosis-advice {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        /* =========================
+           成本健康度
+        ========================= */
+
         .cost-health {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #e5e7eb;
-}
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
 
-.cost-health h3 {
-    margin: 0 0 15px;
-    font-size: 18px;
-}
+        .cost-health h3 {
+            margin: 0 0 15px;
+            font-size: 18px;
+        }
 
-.health-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 12px 0;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
+        .health-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
 
-.health-row:last-child {
-    border-bottom: none;
-}
+        .health-row:last-child {
+            border-bottom: none;
+        }
+
+        /* =========================
+           利润优化
+        ========================= */
+
+        .optimization {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        .optimization h2 {
+            margin: 0 0 15px;
+            font-size: 20px;
+        }
+
+        .optimization-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .optimization-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .optimization-best {
+            margin-top: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px 12px;
+            }
+
+            .container {
+                padding: 20px;
+                border-radius: 12px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+        }
+
     </style>
 </head>
+
 
 <body>
 
@@ -139,52 +226,73 @@
 
     <h1>💰 我的电商利润计算器</h1>
 
+
+    <!-- =========================
+         输入区域
+    ========================= -->
+
     <div class="input-group">
         <label>商品售价（元）</label>
-        <input type="number" id="price" value="99">
+        <input type="number" id="price" value="99" step="0.01">
     </div>
+
 
     <div class="input-group">
         <label>采购成本（元）</label>
-        <input type="number" id="cost" value="35">
+        <input type="number" id="cost" value="35" step="0.01">
     </div>
+
 
     <div class="input-group">
         <label>平台佣金（%）</label>
-        <input type="number" id="commission" value="5">
+        <input type="number" id="commission" value="5" step="0.01">
     </div>
+
 
     <div class="input-group">
         <label>广告费用（元）</label>
-        <input type="number" id="adCost" value="10">
+        <input type="number" id="adCost" value="10" step="0.01">
     </div>
+
 
     <div class="input-group">
         <label>物流成本（元）</label>
-        <input type="number" id="shipping" value="8">
+        <input type="number" id="shipping" value="8" step="0.01">
     </div>
+
 
     <div class="input-group">
         <label>其他成本（元）</label>
-        <input type="number" id="otherCost" value="2">
+        <input type="number" id="otherCost" value="2" step="0.01">
     </div>
-    
-    <div class="input-group">
-    <label>平均点击成本 CPC（元）</label>
-    <input type="number" id="cpc" value="1.5" step="0.01">
-</div>
-    
-    <div class="input-group">
-    <label>退款率（%）</label>
-    <input type="number" id="refundRate" value="10">
-</div>
 
-<div class="input-group">
-    <label>税费（元）</label>
-    <input type="number" id="tax" value="0">
-</div>
 
-    <button onclick="calculateProfit()">计算利润</button>
+    <div class="input-group">
+        <label>平均点击成本 CPC（元）</label>
+        <input type="number" id="cpc" value="1.5" step="0.01">
+    </div>
+
+
+    <div class="input-group">
+        <label>退款率（%）</label>
+        <input type="number" id="refundRate" value="10" step="0.01">
+    </div>
+
+
+    <div class="input-group">
+        <label>税费（元）</label>
+        <input type="number" id="tax" value="0" step="0.01">
+    </div>
+
+
+    <button onclick="calculateProfit()">
+        计算利润
+    </button>
+
+
+    <!-- =========================
+         利润结果
+    ========================= -->
 
     <div class="result">
 
@@ -193,10 +301,14 @@
             <span id="commissionResult">¥0.00</span>
         </div>
 
+
         <div class="result-row">
-    <span>预计退款损失</span>
-    <span id="refundLoss">¥0.00</span>
-             </div>
+            <span>预计退款损失</span>
+            <span id="refundLoss">¥0.00</span>
+        </div>
+
+
+        <hr class="divider">
 
 
         <div class="result-row">
@@ -204,43 +316,76 @@
             <span id="totalCost">¥0.00</span>
         </div>
 
+
         <div class="result-row">
             <span>实际利润</span>
             <span class="profit" id="profit">¥0.00</span>
         </div>
 
+
         <div class="result-row">
             <span>利润率</span>
             <span id="margin">0%</span>
         </div>
-            <div class="result-row">
-    <span>实际 ROI</span>
-    <span id="actualROI">0</span>
-</div>
 
-<div class="result-row">
-    <span>保本售价</span>
-    <span id="breakEvenPrice">¥0.00</span>
-</div>
 
-<div class="result-row">
-    <span>保本 CAC</span>
-    <span id="breakEvenCAC">¥0.00</span>
-</div>
+        <hr class="divider">
 
-<div class="result-row">
-    <span>保本 ROI</span>
-    <span id="breakEvenROI">0</span>
-</div>
 
-<div class="result-row">
-    <span>保本 CVR</span>
-    <span id="breakEvenCVR">0%</span>
-</div>
+        <div class="result-row">
+            <span>实际 ROI</span>
+            <span id="actualROI">0</span>
+        </div>
 
-        <div class="diagnosis" id="diagnosis">
+
+        <div class="result-row">
+            <span>保本售价</span>
+            <span id="breakEvenPrice">¥0.00</span>
+        </div>
+
+
+        <div class="result-row">
+            <span>保本 CAC</span>
+            <span id="breakEvenCAC">¥0.00</span>
+        </div>
+
+
+        <div class="result-row">
+            <span>保本 ROI</span>
+            <span id="breakEvenROI">0</span>
+        </div>
+
+
+        <div class="result-row">
+            <span>保本 CVR</span>
+            <span id="breakEvenCVR">0%</span>
+        </div>
+
+
+        <!-- =========================
+             盈利诊断
+        ========================= -->
+
+        <div class="diagnosis">
+
             <h2>📊 盈利诊断</h2>
-                        <div class="cost-health">
+
+            <div class="diagnosis-status" id="diagnosisStatus">
+                🟢 正在分析...
+            </div>
+
+            <div class="diagnosis-text" id="diagnosisText">
+                输入数据后，系统会自动分析你的盈利情况。
+            </div>
+
+            <div class="diagnosis-advice" id="diagnosisAdvice">
+            </div>
+
+
+            <!-- 成本健康度 -->
+
+            <div class="cost-health">
+
                 <h3>🔍 成本健康度</h3>
 
                 <div class="health-row">
@@ -262,151 +407,290 @@
                     <span>退款率</span>
                     <span id="refundHealth">正在分析...</span>
                 </div>
+
             </div>
 
-            <div class="diagnosis-status" id="diagnosisStatus">
-                🟢 正在分析...
+        </div>
+
+
+        <!-- =========================
+             利润优化模拟
+        ========================= -->
+
+        <div class="optimization">
+
+            <h2>🚀 利润优化模拟</h2>
+
+            <div class="optimization-row">
+                <span>售价提高 5%</span>
+                <span id="priceOptimization">¥0.00</span>
             </div>
 
-            <div class="diagnosis-text" id="diagnosisText">
-                输入数据后，系统会自动分析你的盈利情况。
+            <div class="optimization-row">
+                <span>采购成本降低 10%</span>
+                <span id="costOptimization">¥0.00</span>
             </div>
 
-            <div class="diagnosis-advice" id="diagnosisAdvice">
+            <div class="optimization-row">
+                <span>退款率降至 5%</span>
+                <span id="refundOptimization">¥0.00</span>
             </div>
+
+            <div class="optimization-row">
+                <span>广告费用降低 20%</span>
+                <span id="adOptimization">¥0.00</span>
+            </div>
+
+            <div class="optimization-best" id="bestOptimization">
+                💡 正在分析最值得优化的方向...
+            </div>
+
         </div>
 
     </div>
 
+</div>
+
+
 <script>
+
 function calculateProfit() {
 
-    const price = Number(document.getElementById("price").value);
-    const cost = Number(document.getElementById("cost").value);
-    const commissionRate = Number(document.getElementById("commission").value);
-    const adCost = Number(document.getElementById("adCost").value);
-    const shipping = Number(document.getElementById("shipping").value);
-    const otherCost = Number(document.getElementById("otherCost").value);
-    const refundRate = Number(document.getElementById("refundRate").value);
-    const tax = Number(document.getElementById("tax").value);
-    const cpc = Number(document.getElementById("cpc").value);
+    /* =========================
+       获取输入数据
+    ========================= */
 
-    const commission = price * commissionRate / 100;
-    const refundLoss = price * refundRate / 100;
-    const breakEvenCAC =
-    price -
-    cost -
-    commission -
-    shipping -
-    otherCost -
-    refundLoss -
-    tax;
-    const breakEvenROI =
-    breakEvenCAC > 0
-        ? price / breakEvenCAC
-        : 0;
-    const breakEvenCVR =
-    breakEvenCAC > 0
-        ? cpc / breakEvenCAC * 100
-        : 0;
-    const actualROI =
-    adCost > 0
-        ? price / adCost
-        : 0;
+    const price =
+        Number(document.getElementById("price").value) || 0;
+
+    const cost =
+        Number(document.getElementById("cost").value) || 0;
+
+    const commissionRate =
+        Number(document.getElementById("commission").value) || 0;
+
+    const adCost =
+        Number(document.getElementById("adCost").value) || 0;
+
+    const shipping =
+        Number(document.getElementById("shipping").value) || 0;
+
+    const otherCost =
+        Number(document.getElementById("otherCost").value) || 0;
+
+    const refundRate =
+        Number(document.getElementById("refundRate").value) || 0;
+
+    const tax =
+        Number(document.getElementById("tax").value) || 0;
+
+    const cpc =
+        Number(document.getElementById("cpc").value) || 0;
+
+
+    /* =========================
+       基础计算
+    ========================= */
+
+    // 平台佣金
+    const commission =
+        price * commissionRate / 100;
+
+
+    // 预计退款损失
+    const refundLoss =
+        price * refundRate / 100;
+
+
+    // 固定成本
     const fixedCost =
-    cost +
-    shipping +
-    otherCost +
-    tax;
+        cost +
+        shipping +
+        otherCost +
+        tax;
 
-const breakEvenPrice =
-    (fixedCost + adCost) /
-    (1 - commissionRate / 100 - refundRate / 100);
 
-   const totalCost =
-    cost +
-    commission +
-    adCost +
-    shipping +
-    otherCost +
-    refundLoss +
-    tax;
+    // 总成本
+    const totalCost =
+        fixedCost +
+        commission +
+        adCost +
+        refundLoss;
 
-    const profit = price - totalCost;
 
-    const margin = price === 0
-        ? 0
-        : profit / price * 100;
+    // 实际利润
+    const profit =
+        price - totalCost;
+
+
+    // 利润率
+    const margin =
+        price > 0
+            ? profit / price * 100
+            : 0;
+
+
+    /* =========================
+       ROI
+       国内电商口径：
+       总成交金额 ÷ 花费
+    ========================= */
+
+    const actualROI =
+        adCost > 0
+            ? price / adCost
+            : 0;
+
+
+    /* =========================
+       保本售价
+    ========================= */
+
+    const denominator =
+        1 -
+        commissionRate / 100 -
+        refundRate / 100;
+
+
+    const breakEvenPrice =
+        denominator > 0
+            ? (fixedCost + adCost) / denominator
+            : 0;
+
+
+    /* =========================
+       保本 CAC
+    ========================= */
+
+    const breakEvenCAC =
+        price -
+        cost -
+        commission -
+        shipping -
+        otherCost -
+        refundLoss -
+        tax;
+
+
+    /* =========================
+       保本 ROI
+    ========================= */
+
+    const breakEvenROI =
+        breakEvenCAC > 0
+            ? price / breakEvenCAC
+            : 0;
+
+
+    /* =========================
+       保本 CVR
+    ========================= */
+
+    const breakEvenCVR =
+        breakEvenCAC > 0
+            ? cpc / breakEvenCAC * 100
+            : 0;
+
+
+    /* =========================
+       更新基础结果
+    ========================= */
 
     document.getElementById("commissionResult").textContent =
         "¥" + commission.toFixed(2);
-    
+
+
     document.getElementById("refundLoss").textContent =
-    "¥" + refundLoss.toFixed(2);
+        "¥" + refundLoss.toFixed(2);
+
 
     document.getElementById("totalCost").textContent =
         "¥" + totalCost.toFixed(2);
 
+
     document.getElementById("profit").textContent =
         "¥" + profit.toFixed(2);
 
+
     document.getElementById("margin").textContent =
         margin.toFixed(2) + "%";
+
+
     document.getElementById("actualROI").textContent =
-    actualROI.toFixed(2);
+        actualROI.toFixed(2);
 
-document.getElementById("breakEvenPrice").textContent =
-    "¥" + breakEvenPrice.toFixed(2);
 
-document.getElementById("breakEvenCAC").textContent =
-    "¥" + breakEvenCAC.toFixed(2);
+    document.getElementById("breakEvenPrice").textContent =
+        "¥" + breakEvenPrice.toFixed(2);
 
-document.getElementById("breakEvenROI").textContent =
-    breakEvenROI.toFixed(2);
 
-document.getElementById("breakEvenCVR").textContent =
-    breakEvenCVR.toFixed(2) + "%";
-        // =========================
-    // 盈利诊断
-    // =========================
+    document.getElementById("breakEvenCAC").textContent =
+        "¥" + Math.max(breakEvenCAC, 0).toFixed(2);
+
+
+    document.getElementById("breakEvenROI").textContent =
+        breakEvenROI.toFixed(2);
+
+
+    document.getElementById("breakEvenCVR").textContent =
+        breakEvenCVR.toFixed(2) + "%";
+
+
+    /* =========================
+       盈利诊断
+    ========================= */
 
     let diagnosisStatus = "";
     let diagnosisText = "";
     let diagnosisAdvice = "";
 
+
     if (profit < 0) {
 
-        diagnosisStatus = "🔴 当前处于亏损状态";
+        diagnosisStatus =
+            "🔴 当前处于亏损状态";
 
         diagnosisText =
             "目前每卖出一件商品都会产生亏损，建议暂时不要扩大广告投入。";
 
         diagnosisAdvice =
-            "💡 建议优先检查：商品售价、采购成本、广告费用以及退款率。";
+            "💡 建议优先检查售价、采购成本、广告费用以及退款率。";
 
-    } else if (margin < 10) {
+    }
 
-        diagnosisStatus = "🟠 盈利能力较弱";
+
+    else if (margin < 10) {
+
+        diagnosisStatus =
+            "🟠 盈利能力较弱";
 
         diagnosisText =
-            "当前虽然盈利，但利润空间比较薄，广告成本或退款率稍有上升就可能进入亏损。";
+            "当前虽然盈利，但利润空间比较薄，成本稍有上升就可能进入亏损。";
 
         diagnosisAdvice =
             "💡 建议重点优化采购成本和广告成本，提高单品利润空间。";
 
-    } else if (margin < 20) {
+    }
 
-        diagnosisStatus = "🟡 盈利能力一般";
+
+    else if (margin < 20) {
+
+        diagnosisStatus =
+            "🟡 盈利能力一般";
 
         diagnosisText =
             "当前产品具备盈利能力，但利润率还有进一步提升空间。";
 
         diagnosisAdvice =
-            "💡 建议从降低采购成本、优化广告投放和降低退款率三个方向进行优化。";
+            "💡 建议从采购成本、广告效率和退款率三个方向进行优化。";
 
-    } else if (margin < 30) {
+    }
 
-        diagnosisStatus = "🟢 盈利状态健康";
+
+    else if (margin < 30) {
+
+        diagnosisStatus =
+            "🟢 盈利状态健康";
 
         diagnosisText =
             "当前利润率较为健康，产品具备一定的盈利空间。";
@@ -414,130 +698,400 @@ document.getElementById("breakEvenCVR").textContent =
         diagnosisAdvice =
             "💡 可以继续优化广告效率，同时关注退款率和采购成本。";
 
-    } else {
+    }
 
-        diagnosisStatus = "🟢 盈利能力优秀";
+
+    else {
+
+        diagnosisStatus =
+            "🟢 盈利能力优秀";
 
         diagnosisText =
             "当前产品利润率较高，具备不错的盈利空间。";
 
         diagnosisAdvice =
             "💡 可以考虑适当扩大广告投入或提高销量，同时保持当前成本结构。";
+
     }
 
-    // 退款率诊断
+
+    /* =========================
+       退款率诊断
+    ========================= */
+
     if (refundRate > 10) {
+
         diagnosisAdvice +=
             "<br>⚠️ 当前退款率为 " +
             refundRate.toFixed(2) +
-            "% ，偏高，建议重点优化商品描述、产品质量和售后体验。";
+            "%，偏高，建议重点优化商品描述、产品质量和售后体验。";
+
     }
 
-    // 广告成本诊断
-    const adRate = price > 0
-        ? adCost / price * 100
-        : 0;
+
+    /* =========================
+       广告成本诊断
+    ========================= */
+
+    const adRate =
+        price > 0
+            ? adCost / price * 100
+            : 0;
+
 
     if (adRate > 20) {
+
         diagnosisAdvice +=
             "<br>⚠️ 广告费用占售价 " +
             adRate.toFixed(2) +
-            "% ，广告成本偏高，建议优化投放效率。";
+            "%，广告成本偏高，建议优化投放效率。";
+
     }
+
 
     document.getElementById("diagnosisStatus").textContent =
         diagnosisStatus;
 
+
     document.getElementById("diagnosisText").textContent =
         diagnosisText;
 
+
     document.getElementById("diagnosisAdvice").innerHTML =
         diagnosisAdvice;
-        // =========================
-    // 成本健康度分析
-    // =========================
-
-    const costRate = price > 0
-        ? cost / price * 100
-        : 0;
-
-    const shippingRate = price > 0
-        ? shipping / price * 100
-        : 0;
-
-    const adCostRate = price > 0
-        ? adCost / price * 100
-        : 0;
 
 
-    // 采购成本
+    /* =========================
+       成本健康度
+    ========================= */
+
+    const costRate =
+        price > 0
+            ? cost / price * 100
+            : 0;
+
+
+    const shippingRate =
+        price > 0
+            ? shipping / price * 100
+            : 0;
+
+
+    const adCostRate =
+        price > 0
+            ? adCost / price * 100
+            : 0;
+
+
+    /* 采购成本 */
+
     let costHealthText;
 
+
     if (costRate <= 40) {
-        costHealthText = "🟢 健康 " + costRate.toFixed(2) + "%";
-    } else if (costRate <= 50) {
-        costHealthText = "🟡 偏高 " + costRate.toFixed(2) + "%";
-    } else {
-        costHealthText = "🔴 很高 " + costRate.toFixed(2) + "%";
+
+        costHealthText =
+            "🟢 健康 " +
+            costRate.toFixed(2) +
+            "%";
+
+    }
+
+    else if (costRate <= 50) {
+
+        costHealthText =
+            "🟡 偏高 " +
+            costRate.toFixed(2) +
+            "%";
+
+    }
+
+    else {
+
+        costHealthText =
+            "🔴 很高 " +
+            costRate.toFixed(2) +
+            "%";
+
     }
 
 
-    // 广告成本
+    /* 广告成本 */
+
     let adHealthText;
 
+
     if (adCostRate <= 10) {
-        adHealthText = "🟢 健康 " + adCostRate.toFixed(2) + "%";
-    } else if (adCostRate <= 20) {
-        adHealthText = "🟡 偏高 " + adCostRate.toFixed(2) + "%";
-    } else {
-        adHealthText = "🔴 很高 " + adCostRate.toFixed(2) + "%";
+
+        adHealthText =
+            "🟢 健康 " +
+            adCostRate.toFixed(2) +
+            "%";
+
+    }
+
+    else if (adCostRate <= 20) {
+
+        adHealthText =
+            "🟡 偏高 " +
+            adCostRate.toFixed(2) +
+            "%";
+
+    }
+
+    else {
+
+        adHealthText =
+            "🔴 很高 " +
+            adCostRate.toFixed(2) +
+            "%";
+
     }
 
 
-    // 物流成本
+    /* 物流成本 */
+
     let shippingHealthText;
 
+
     if (shippingRate <= 10) {
+
         shippingHealthText =
-            "🟢 健康 " + shippingRate.toFixed(2) + "%";
-    } else if (shippingRate <= 15) {
+            "🟢 健康 " +
+            shippingRate.toFixed(2) +
+            "%";
+
+    }
+
+    else if (shippingRate <= 15) {
+
         shippingHealthText =
-            "🟡 偏高 " + shippingRate.toFixed(2) + "%";
-    } else {
+            "🟡 偏高 " +
+            shippingRate.toFixed(2) +
+            "%";
+
+    }
+
+    else {
+
         shippingHealthText =
-            "🔴 很高 " + shippingRate.toFixed(2) + "%";
+            "🔴 很高 " +
+            shippingRate.toFixed(2) +
+            "%";
+
     }
 
 
-    // 退款率
+    /* 退款率 */
+
     let refundHealthText;
 
+
     if (refundRate <= 5) {
+
         refundHealthText =
-            "🟢 优秀 " + refundRate.toFixed(2) + "%";
-    } else if (refundRate <= 10) {
+            "🟢 优秀 " +
+            refundRate.toFixed(2) +
+            "%";
+
+    }
+
+    else if (refundRate <= 10) {
+
         refundHealthText =
-            "🟡 注意 " + refundRate.toFixed(2) + "%";
-    } else {
+            "🟡 注意 " +
+            refundRate.toFixed(2) +
+            "%";
+
+    }
+
+    else {
+
         refundHealthText =
-            "🔴 偏高 " + refundRate.toFixed(2) + "%";
+            "🔴 偏高 " +
+            refundRate.toFixed(2) +
+            "%";
+
     }
 
 
     document.getElementById("costHealth").textContent =
         costHealthText;
 
+
     document.getElementById("adHealth").textContent =
         adHealthText;
+
 
     document.getElementById("shippingHealth").textContent =
         shippingHealthText;
 
+
     document.getElementById("refundHealth").textContent =
         refundHealthText;
+
+
+    /* =========================
+       利润优化模拟
+    ========================= */
+
+
+    // 售价提高 5%
+
+    const newPrice =
+        price * 1.05;
+
+
+    const priceCommission =
+        newPrice * commissionRate / 100;
+
+
+    const priceRefundLoss =
+        newPrice * refundRate / 100;
+
+
+    const priceOptimizationProfit =
+        newPrice -
+        cost -
+        priceCommission -
+        adCost -
+        shipping -
+        otherCost -
+        priceRefundLoss -
+        tax;
+
+
+    // 采购成本降低 10%
+
+    const newCost =
+        cost * 0.90;
+
+
+    const costOptimizationProfit =
+        price -
+        newCost -
+        commission -
+        adCost -
+        shipping -
+        otherCost -
+        refundLoss -
+        tax;
+
+
+    // 退款率降至 5%
+
+    const newRefundRate =
+        5;
+
+
+    const newRefundLoss =
+        price * newRefundRate / 100;
+
+
+    const refundOptimizationProfit =
+        price -
+        cost -
+        commission -
+        adCost -
+        shipping -
+        otherCost -
+        newRefundLoss -
+        tax;
+
+
+    // 广告费用降低 20%
+
+    const newAdCost =
+        adCost * 0.80;
+
+
+    const adOptimizationProfit =
+        price -
+        cost -
+        commission -
+        newAdCost -
+        shipping -
+        otherCost -
+        refundLoss -
+        tax;
+
+
+    /* 输出模拟结果 */
+
+    document.getElementById("priceOptimization").textContent =
+        "¥" + priceOptimizationProfit.toFixed(2);
+
+
+    document.getElementById("costOptimization").textContent =
+        "¥" + costOptimizationProfit.toFixed(2);
+
+
+    document.getElementById("refundOptimization").textContent =
+        "¥" + refundOptimizationProfit.toFixed(2);
+
+
+    document.getElementById("adOptimization").textContent =
+        "¥" + adOptimizationProfit.toFixed(2);
+
+
+    /* =========================
+       找出最佳优化方案
+    ========================= */
+
+    const optimizationResults = [
+
+        {
+            name: "提高售价 5%",
+            profit: priceOptimizationProfit
+        },
+
+        {
+            name: "采购成本降低 10%",
+            profit: costOptimizationProfit
+        },
+
+        {
+            name: "退款率降至 5%",
+            profit: refundOptimizationProfit
+        },
+
+        {
+            name: "广告费用降低 20%",
+            profit: adOptimizationProfit
+        }
+
+    ];
+
+
+    optimizationResults.sort(
+        (a, b) => b.profit - a.profit
+    );
+
+
+    const best =
+        optimizationResults[0];
+
+
+    const profitIncrease =
+        best.profit - profit;
+
+
+    document.getElementById("bestOptimization").innerHTML =
+
+        "💡 最值得优化：<strong>" +
+        best.name +
+        "</strong><br>" +
+
+        "预计每单利润增加 ¥" +
+        profitIncrease.toFixed(2);
+
 }
 
+
+/* 页面打开时自动计算 */
+
 calculateProfit();
+
 </script>
 
 </body>
