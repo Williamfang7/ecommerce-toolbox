@@ -107,6 +107,29 @@
     line-height: 1.8;
     color: #333;
 }
+        .cost-health {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.cost-health h3 {
+    margin: 0 0 15px;
+    font-size: 18px;
+}
+
+.health-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.health-row:last-child {
+    border-bottom: none;
+}
     </style>
 </head>
 
@@ -217,6 +240,29 @@
 
         <div class="diagnosis" id="diagnosis">
             <h2>📊 盈利诊断</h2>
+                        <div class="cost-health">
+                <h3>🔍 成本健康度</h3>
+
+                <div class="health-row">
+                    <span>采购成本</span>
+                    <span id="costHealth">正在分析...</span>
+                </div>
+
+                <div class="health-row">
+                    <span>广告成本</span>
+                    <span id="adHealth">正在分析...</span>
+                </div>
+
+                <div class="health-row">
+                    <span>物流成本</span>
+                    <span id="shippingHealth">正在分析...</span>
+                </div>
+
+                <div class="health-row">
+                    <span>退款率</span>
+                    <span id="refundHealth">正在分析...</span>
+                </div>
+            </div>
 
             <div class="diagnosis-status" id="diagnosisStatus">
                 🟢 正在分析...
@@ -407,6 +453,88 @@ document.getElementById("breakEvenCVR").textContent =
 
     document.getElementById("diagnosisAdvice").innerHTML =
         diagnosisAdvice;
+        // =========================
+    // 成本健康度分析
+    // =========================
+
+    const costRate = price > 0
+        ? cost / price * 100
+        : 0;
+
+    const shippingRate = price > 0
+        ? shipping / price * 100
+        : 0;
+
+    const adCostRate = price > 0
+        ? adCost / price * 100
+        : 0;
+
+
+    // 采购成本
+    let costHealthText;
+
+    if (costRate <= 40) {
+        costHealthText = "🟢 健康 " + costRate.toFixed(2) + "%";
+    } else if (costRate <= 50) {
+        costHealthText = "🟡 偏高 " + costRate.toFixed(2) + "%";
+    } else {
+        costHealthText = "🔴 很高 " + costRate.toFixed(2) + "%";
+    }
+
+
+    // 广告成本
+    let adHealthText;
+
+    if (adCostRate <= 10) {
+        adHealthText = "🟢 健康 " + adCostRate.toFixed(2) + "%";
+    } else if (adCostRate <= 20) {
+        adHealthText = "🟡 偏高 " + adCostRate.toFixed(2) + "%";
+    } else {
+        adHealthText = "🔴 很高 " + adCostRate.toFixed(2) + "%";
+    }
+
+
+    // 物流成本
+    let shippingHealthText;
+
+    if (shippingRate <= 10) {
+        shippingHealthText =
+            "🟢 健康 " + shippingRate.toFixed(2) + "%";
+    } else if (shippingRate <= 15) {
+        shippingHealthText =
+            "🟡 偏高 " + shippingRate.toFixed(2) + "%";
+    } else {
+        shippingHealthText =
+            "🔴 很高 " + shippingRate.toFixed(2) + "%";
+    }
+
+
+    // 退款率
+    let refundHealthText;
+
+    if (refundRate <= 5) {
+        refundHealthText =
+            "🟢 优秀 " + refundRate.toFixed(2) + "%";
+    } else if (refundRate <= 10) {
+        refundHealthText =
+            "🟡 注意 " + refundRate.toFixed(2) + "%";
+    } else {
+        refundHealthText =
+            "🔴 偏高 " + refundRate.toFixed(2) + "%";
+    }
+
+
+    document.getElementById("costHealth").textContent =
+        costHealthText;
+
+    document.getElementById("adHealth").textContent =
+        adHealthText;
+
+    document.getElementById("shippingHealth").textContent =
+        shippingHealthText;
+
+    document.getElementById("refundHealth").textContent =
+        refundHealthText;
 }
 
 calculateProfit();
