@@ -118,6 +118,11 @@
     </div>
     
     <div class="input-group">
+    <label>平均点击成本 CPC（元）</label>
+    <input type="number" id="cpc" value="1.5" step="0.01">
+</div>
+    
+    <div class="input-group">
     <label>退款率（%）</label>
     <input type="number" id="refundRate" value="10">
 </div>
@@ -155,6 +160,30 @@
             <span>利润率</span>
             <span id="margin">0%</span>
         </div>
+            <div class="result-row">
+    <span>实际 ROI</span>
+    <span id="actualROI">0</span>
+</div>
+
+<div class="result-row">
+    <span>保本售价</span>
+    <span id="breakEvenPrice">¥0.00</span>
+</div>
+
+<div class="result-row">
+    <span>保本 CAC</span>
+    <span id="breakEvenCAC">¥0.00</span>
+</div>
+
+<div class="result-row">
+    <span>保本 ROI</span>
+    <span id="breakEvenROI">0</span>
+</div>
+
+<div class="result-row">
+    <span>保本 CVR</span>
+    <span id="breakEvenCVR">0%</span>
+</div>
 
     </div>
 
@@ -171,9 +200,39 @@ function calculateProfit() {
     const otherCost = Number(document.getElementById("otherCost").value);
     const refundRate = Number(document.getElementById("refundRate").value);
     const tax = Number(document.getElementById("tax").value);
+    const cpc = Number(document.getElementById("cpc").value);
 
     const commission = price * commissionRate / 100;
     const refundLoss = price * refundRate / 100;
+    const breakEvenCAC =
+    price -
+    cost -
+    commission -
+    shipping -
+    otherCost -
+    refundLoss -
+    tax;
+    const breakEvenROI =
+    breakEvenCAC > 0
+        ? price / breakEvenCAC
+        : 0;
+    const breakEvenCVR =
+    breakEvenCAC > 0
+        ? cpc / breakEvenCAC * 100
+        : 0;
+    const actualROI =
+    adCost > 0
+        ? price / adCost
+        : 0;
+    const fixedCost =
+    cost +
+    shipping +
+    otherCost +
+    tax;
+
+const breakEvenPrice =
+    (fixedCost + adCost) /
+    (1 - commissionRate / 100 - refundRate / 100);
 
    const totalCost =
     cost +
@@ -204,6 +263,20 @@ function calculateProfit() {
 
     document.getElementById("margin").textContent =
         margin.toFixed(2) + "%";
+    document.getElementById("actualROI").textContent =
+    actualROI.toFixed(2);
+
+document.getElementById("breakEvenPrice").textContent =
+    "¥" + breakEvenPrice.toFixed(2);
+
+document.getElementById("breakEvenCAC").textContent =
+    "¥" + breakEvenCAC.toFixed(2);
+
+document.getElementById("breakEvenROI").textContent =
+    breakEvenROI.toFixed(2);
+
+document.getElementById("breakEvenCVR").textContent =
+    breakEvenCVR.toFixed(2) + "%";
 }
 
 calculateProfit();
