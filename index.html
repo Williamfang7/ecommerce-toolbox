@@ -78,6 +78,35 @@
             font-size: 24px;
             font-weight: bold;
         }
+        .diagnosis {
+    margin-top: 20px;
+    padding: 20px;
+    background: #fafafa;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.diagnosis h2 {
+    margin: 0 0 15px;
+    font-size: 20px;
+}
+
+.diagnosis-status {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.diagnosis-text {
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+.diagnosis-advice {
+    line-height: 1.8;
+    color: #333;
+}
     </style>
 </head>
 
@@ -186,9 +215,22 @@
     <span id="breakEvenCVR">0%</span>
 </div>
 
-    </div>
+        <div class="diagnosis" id="diagnosis">
+            <h2>📊 盈利诊断</h2>
 
-</div>
+            <div class="diagnosis-status" id="diagnosisStatus">
+                🟢 正在分析...
+            </div>
+
+            <div class="diagnosis-text" id="diagnosisText">
+                输入数据后，系统会自动分析你的盈利情况。
+            </div>
+
+            <div class="diagnosis-advice" id="diagnosisAdvice">
+            </div>
+        </div>
+
+    </div>
 
 <script>
 function calculateProfit() {
@@ -278,6 +320,93 @@ document.getElementById("breakEvenROI").textContent =
 
 document.getElementById("breakEvenCVR").textContent =
     breakEvenCVR.toFixed(2) + "%";
+        // =========================
+    // 盈利诊断
+    // =========================
+
+    let diagnosisStatus = "";
+    let diagnosisText = "";
+    let diagnosisAdvice = "";
+
+    if (profit < 0) {
+
+        diagnosisStatus = "🔴 当前处于亏损状态";
+
+        diagnosisText =
+            "目前每卖出一件商品都会产生亏损，建议暂时不要扩大广告投入。";
+
+        diagnosisAdvice =
+            "💡 建议优先检查：商品售价、采购成本、广告费用以及退款率。";
+
+    } else if (margin < 10) {
+
+        diagnosisStatus = "🟠 盈利能力较弱";
+
+        diagnosisText =
+            "当前虽然盈利，但利润空间比较薄，广告成本或退款率稍有上升就可能进入亏损。";
+
+        diagnosisAdvice =
+            "💡 建议重点优化采购成本和广告成本，提高单品利润空间。";
+
+    } else if (margin < 20) {
+
+        diagnosisStatus = "🟡 盈利能力一般";
+
+        diagnosisText =
+            "当前产品具备盈利能力，但利润率还有进一步提升空间。";
+
+        diagnosisAdvice =
+            "💡 建议从降低采购成本、优化广告投放和降低退款率三个方向进行优化。";
+
+    } else if (margin < 30) {
+
+        diagnosisStatus = "🟢 盈利状态健康";
+
+        diagnosisText =
+            "当前利润率较为健康，产品具备一定的盈利空间。";
+
+        diagnosisAdvice =
+            "💡 可以继续优化广告效率，同时关注退款率和采购成本。";
+
+    } else {
+
+        diagnosisStatus = "🟢 盈利能力优秀";
+
+        diagnosisText =
+            "当前产品利润率较高，具备不错的盈利空间。";
+
+        diagnosisAdvice =
+            "💡 可以考虑适当扩大广告投入或提高销量，同时保持当前成本结构。";
+    }
+
+    // 退款率诊断
+    if (refundRate > 10) {
+        diagnosisAdvice +=
+            "<br>⚠️ 当前退款率为 " +
+            refundRate.toFixed(2) +
+            "% ，偏高，建议重点优化商品描述、产品质量和售后体验。";
+    }
+
+    // 广告成本诊断
+    const adRate = price > 0
+        ? adCost / price * 100
+        : 0;
+
+    if (adRate > 20) {
+        diagnosisAdvice +=
+            "<br>⚠️ 广告费用占售价 " +
+            adRate.toFixed(2) +
+            "% ，广告成本偏高，建议优化投放效率。";
+    }
+
+    document.getElementById("diagnosisStatus").textContent =
+        diagnosisStatus;
+
+    document.getElementById("diagnosisText").textContent =
+        diagnosisText;
+
+    document.getElementById("diagnosisAdvice").innerHTML =
+        diagnosisAdvice;
 }
 
 calculateProfit();
