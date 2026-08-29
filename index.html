@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>电商经营决策工具 V7</title>
+<title>电商经营决策工具 V8</title>
 
 <style>
 *{box-sizing:border-box}
@@ -108,12 +109,6 @@ button,input,select{font-family:inherit}
     font-size:24px;
     font-weight:800;
     color:#111827;
-}
-
-.kpi-small{
-    margin-top:5px;
-    font-size:12px;
-    color:#9ca3af;
 }
 
 .input-grid{
@@ -304,7 +299,7 @@ input:focus,select:focus{
 
 .forecast-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:12px;
 }
 
@@ -340,7 +335,7 @@ input:focus,select:focus{
 .sku-table{
     width:100%;
     border-collapse:collapse;
-    min-width:950px;
+    min-width:1150px;
 }
 
 .sku-table th,
@@ -367,7 +362,7 @@ input:focus,select:focus{
 
 .sku-summary{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:12px;
 }
 
@@ -414,9 +409,16 @@ input:focus,select:focus{
     color:#9ca3af;
 }
 
+.small-note{
+    color:#9ca3af;
+    font-size:12px;
+    margin-top:6px;
+}
+
 @media(max-width:800px){
 
-    .kpi-grid{
+    .kpi-grid,
+    .sku-summary{
         grid-template-columns:repeat(2,1fr);
     }
 
@@ -472,7 +474,6 @@ input:focus,select:focus{
     <p>算清利润 · 管理 SKU · 发现问题 · 优化经营</p>
 </div>
 
-<!-- 导航 -->
 <div class="nav">
 
     <button class="active"
@@ -498,9 +499,7 @@ input:focus,select:focus{
 </div>
 
 
-<!-- =====================================================
-     经营总览
-===================================================== -->
+<!-- ==================== 经营总览 ==================== -->
 
 <div class="page active" id="overview">
 
@@ -545,9 +544,7 @@ input:focus,select:focus{
                 正在分析...
             </div>
 
-            <div id="overviewAdvice">
-                正在读取经营数据。
-            </div>
+            <div id="overviewAdvice"></div>
 
             <ul id="overviewRisk"></ul>
 
@@ -604,6 +601,11 @@ input:focus,select:focus{
                 <div class="summary-value" id="overviewWorstSku">--</div>
             </div>
 
+            <div class="summary-box">
+                <div class="summary-label">SKU总利润</div>
+                <div class="summary-value" id="overviewTotalProfit">¥0.00</div>
+            </div>
+
         </div>
 
     </div>
@@ -611,9 +613,7 @@ input:focus,select:focus{
 </div>
 
 
-<!-- =====================================================
-     利润分析
-===================================================== -->
+<!-- ==================== 利润分析 ==================== -->
 
 <div class="page" id="profit">
 
@@ -622,7 +622,7 @@ input:focus,select:focus{
         <h2 class="card-title">💰 利润分析</h2>
 
         <div class="sync-note">
-            🔄 当前利润分析会与 SKU 数据联动。选择 SKU 后，可以直接分析该商品。
+            🔄 选择 SKU 后，所有数据会自动载入。修改后可保存回 SKU。
         </div>
 
         <div class="selector-box">
@@ -695,6 +695,18 @@ input:focus,select:focus{
             </div>
 
             <div class="input-group">
+                <label>广告点击率 CTR（%）</label>
+                <input id="ctr" type="number" value="2"
+                    step="0.01" oninput="calculateAll()">
+            </div>
+
+            <div class="input-group">
+                <label>转化率 CVR（%）</label>
+                <input id="cvr" type="number" value="5"
+                    step="0.01" oninput="calculateAll()">
+            </div>
+
+            <div class="input-group">
                 <label>退款率（%）</label>
                 <input id="refundRate" type="number" value="10"
                     step="0.01" oninput="calculateAll()">
@@ -704,6 +716,12 @@ input:focus,select:focus{
                 <label>税费（元）</label>
                 <input id="tax" type="number" value="0"
                     step="0.01" oninput="calculateAll()">
+            </div>
+
+            <div class="input-group">
+                <label>每天销量（单）</label>
+                <input id="dailySales" type="number" value="50"
+                    step="1" oninput="calculateAll()">
             </div>
 
         </div>
@@ -784,7 +802,7 @@ input:focus,select:focus{
         </div>
 
         <div class="result-row">
-            <span>保本 CAC</span>
+            <span>保本广告费</span>
             <strong id="breakEvenCAC">¥0.00</strong>
         </div>
 
@@ -794,12 +812,12 @@ input:focus,select:focus{
         </div>
 
         <div class="result-row">
-            <span>保本 CVR</span>
+            <span>理论广告 CVR</span>
             <strong id="breakEvenCVR">0%</strong>
         </div>
 
         <div class="result-row">
-            <span>当前 CAC</span>
+            <span>当前广告成本 / 单</span>
             <strong id="actualCAC">¥0.00</strong>
         </div>
 
@@ -873,20 +891,12 @@ input:focus,select:focus{
 
         <h2 class="card-title">📈 销量利润预测</h2>
 
-        <div class="input-group">
-
-            <label>预计每天销量（单）</label>
-
-            <input
-                type="number"
-                id="dailySales"
-                value="50"
-                step="1"
-                oninput="calculateForecast()">
-
-        </div>
-
         <div class="forecast-grid">
+
+            <div class="forecast-item">
+                <div class="forecast-label">每日销量</div>
+                <div class="forecast-value" id="forecastSales">0</div>
+            </div>
 
             <div class="forecast-item">
                 <div class="forecast-label">每日利润</div>
@@ -905,9 +915,7 @@ input:focus,select:focus{
 </div>
 
 
-<!-- =====================================================
-     SKU 管理
-===================================================== -->
+<!-- ==================== SKU管理 ==================== -->
 
 <div class="page" id="sku">
 
@@ -916,7 +924,7 @@ input:focus,select:focus{
         <h2 class="card-title">📦 SKU管理</h2>
 
         <div class="sync-note">
-            💡 SKU 是整个工具的数据中心。添加后，经营总览、利润分析、利润优化都会自动同步。
+            💡 SKU 是整个工具的数据中心。这里的数据会同步到经营总览、利润分析和利润优化。
         </div>
 
         <div class="sku-form">
@@ -945,6 +953,14 @@ input:focus,select:focus{
             </div>
 
             <div class="input-group">
+                <label>平台佣金（%）</label>
+                <input id="skuCommission"
+                    type="number"
+                    value="5"
+                    step="0.01">
+            </div>
+
+            <div class="input-group">
                 <label>广告费用（元）</label>
                 <input id="skuAd"
                     type="number"
@@ -961,6 +977,14 @@ input:focus,select:focus{
             </div>
 
             <div class="input-group">
+                <label>其他成本（元）</label>
+                <input id="skuOther"
+                    type="number"
+                    value="2"
+                    step="0.01">
+            </div>
+
+            <div class="input-group">
                 <label>退款率（%）</label>
                 <input id="skuRefund"
                     type="number"
@@ -968,11 +992,52 @@ input:focus,select:focus{
                     step="0.01">
             </div>
 
+            <div class="input-group">
+                <label>CPC（元）</label>
+                <input id="skuCpc"
+                    type="number"
+                    value="1.5"
+                    step="0.01">
+            </div>
+
+            <div class="input-group">
+                <label>CVR（%）</label>
+                <input id="skuCvr"
+                    type="number"
+                    value="5"
+                    step="0.01">
+            </div>
+
+            <div class="input-group">
+                <label>每天销量（单）</label>
+                <input id="skuSales"
+                    type="number"
+                    value="50"
+                    step="1">
+            </div>
+
+            <div class="input-group">
+                <label>税费（元）</label>
+                <input id="skuTax"
+                    type="number"
+                    value="0"
+                    step="0.01">
+            </div>
+
         </div>
 
         <button class="main-button"
+                id="skuSubmitButton"
                 onclick="addSKU()">
             ＋ 添加 SKU
+        </button>
+
+        <button
+            class="secondary-button"
+            id="cancelEditButton"
+            onclick="cancelSKUEdit()"
+            style="display:none;width:100%;margin-top:10px;">
+            取消编辑
         </button>
 
 
@@ -990,6 +1055,8 @@ input:focus,select:focus{
                     <th>利润</th>
                     <th>利润率</th>
                     <th>ROI</th>
+                    <th>日销量</th>
+                    <th>日利润</th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>
@@ -1025,6 +1092,11 @@ input:focus,select:focus{
                 <div class="summary-value" id="worstSku">--</div>
             </div>
 
+            <div class="summary-box">
+                <div class="summary-label">全部SKU每日利润</div>
+                <div class="summary-value" id="totalDailySkuProfit">¥0.00</div>
+            </div>
+
         </div>
 
     </div>
@@ -1032,9 +1104,7 @@ input:focus,select:focus{
 </div>
 
 
-<!-- =====================================================
-     利润优化
-===================================================== -->
+<!-- ==================== 利润优化 ==================== -->
 
 <div class="page" id="optimization">
 
@@ -1043,7 +1113,7 @@ input:focus,select:focus{
         <h2 class="card-title">🚀 利润优化</h2>
 
         <div class="sync-note">
-            🔄 优化分析自动读取利润分析当前商品。
+            🔄 优化分析自动读取当前选择的 SKU。
         </div>
 
         <div class="selector-box">
@@ -1192,14 +1262,16 @@ input:focus,select:focus{
 <script>
 
 /* =====================================================
-   全局数据中心
+   数据中心
 ===================================================== */
 
-const STORAGE_KEY = "ecommerceToolV7";
+const STORAGE_KEY = "ecommerceToolV8";
 
 let skuList = loadSKUs();
 
 let currentSKUId = null;
+
+let editingSKUId = null;
 
 
 /* =====================================================
@@ -1213,6 +1285,7 @@ function num(id){
     if(!el) return 0;
 
     return Number(el.value) || 0;
+
 }
 
 
@@ -1232,13 +1305,50 @@ function loadSKUs(){
                 localStorage.getItem(STORAGE_KEY) || "[]"
             );
 
-        return Array.isArray(data) ? data : [];
+        if(!Array.isArray(data)) return [];
+
+        return data.map(normalizeSKU);
 
     }catch(e){
 
         return [];
 
     }
+
+}
+
+
+function normalizeSKU(sku){
+
+    return {
+
+        id:sku.id || Date.now(),
+
+        name:sku.name || "未命名 SKU",
+
+        price:Number(sku.price) || 0,
+
+        cost:Number(sku.cost) || 0,
+
+        commissionRate:Number(sku.commissionRate) || 5,
+
+        ad:Number(sku.ad) || 0,
+
+        shipping:Number(sku.shipping) || 0,
+
+        otherCost:Number(sku.otherCost) || 0,
+
+        refund:Number(sku.refund) || 0,
+
+        tax:Number(sku.tax) || 0,
+
+        cpc:Number(sku.cpc) || 0,
+
+        cvr:Number(sku.cvr) || 5,
+
+        dailySales:Number(sku.dailySales) || 0
+
+    };
 
 }
 
@@ -1268,9 +1378,14 @@ function switchPage(page,button){
         });
 
 
-    document
-        .getElementById(page)
-        .classList.add("active");
+    const target =
+        document.getElementById(page);
+
+    if(target){
+
+        target.classList.add("active");
+
+    }
 
 
     document
@@ -1282,41 +1397,29 @@ function switchPage(page,button){
         });
 
 
-    button.classList.add("active");
+    if(button){
 
-
-    if(page === "overview"){
-
-        updateAll();
+        button.classList.add("active");
 
     }
 
-    if(page === "sku"){
 
-        renderSKU();
-
-    }
-
-    if(page === "optimization"){
-
-        syncOptimizationSelect();
-
-        updateOptimization();
-
-    }
+    refreshAllUI();
 
 }
 
 
 /* =====================================================
-   统一商品计算
+   商品统一计算
 ===================================================== */
 
 function calculateProduct(data){
 
-    const price = Number(data.price) || 0;
+    const price =
+        Number(data.price) || 0;
 
-    const cost = Number(data.cost) || 0;
+    const cost =
+        Number(data.cost) || 0;
 
     const commissionRate =
         Number(data.commissionRate) || 0;
@@ -1338,6 +1441,12 @@ function calculateProduct(data){
 
     const cpc =
         Number(data.cpc) || 0;
+
+    const cvr =
+        Number(data.cvr) || 0;
+
+    const dailySales =
+        Number(data.dailySales) || 0;
 
 
     const commission =
@@ -1371,16 +1480,6 @@ function calculateProduct(data){
     const roi =
         adCost > 0
             ? price / adCost
-            : 0;
-
-
-    const cac =
-        adCost;
-
-
-    const cvr =
-        cac > 0
-            ? cpc / cac * 100
             : 0;
 
 
@@ -1420,9 +1519,17 @@ function calculateProduct(data){
 
 
     const breakEvenCVR =
-        breakEvenCAC > 0
+        cpc > 0 && breakEvenCAC > 0
             ? cpc / breakEvenCAC * 100
             : 0;
+
+
+    const dailyProfit =
+        profit * dailySales;
+
+
+    const monthlyProfit =
+        dailyProfit * 30;
 
 
     return {
@@ -1438,16 +1545,18 @@ function calculateProduct(data){
         refundLoss,
         tax,
         cpc,
+        cvr,
+        dailySales,
         totalCost,
         profit,
         margin,
         roi,
-        cac,
-        cvr,
         breakEvenPrice,
         breakEvenCAC,
         breakEvenROI,
-        breakEvenCVR
+        breakEvenCVR,
+        dailyProfit,
+        monthlyProfit
 
     };
 
@@ -1455,7 +1564,7 @@ function calculateProduct(data){
 
 
 /* =====================================================
-   获取当前利润分析数据
+   当前利润分析数据
 ===================================================== */
 
 function getCurrentData(){
@@ -1478,7 +1587,11 @@ function getCurrentData(){
 
         tax:num("tax"),
 
-        cpc:num("cpc")
+        cpc:num("cpc"),
+
+        cvr:num("cvr"),
+
+        dailySales:num("dailySales")
 
     };
 
@@ -1491,61 +1604,103 @@ function getCurrentData(){
 
 function calculateAll(){
 
-    const raw =
-        getCurrentData();
-
     const d =
-        calculateProduct(raw);
+        calculateProduct(
+            getCurrentData()
+        );
 
 
-    document.getElementById("coreProfit").textContent =
-        money(d.profit);
+    setText("coreProfit",money(d.profit));
 
-    document.getElementById("coreMargin").textContent =
-        d.margin.toFixed(2) + "%";
+    setText(
+        "coreMargin",
+        d.margin.toFixed(2) + "%"
+    );
 
-    document.getElementById("coreROI").textContent =
-        d.roi.toFixed(2);
+    setText(
+        "coreROI",
+        d.roi.toFixed(2)
+    );
 
-    document.getElementById("coreAdRate").textContent =
+    setText(
+        "coreAdRate",
         d.price > 0
             ? (d.adCost / d.price * 100).toFixed(2) + "%"
-            : "0%";
+            : "0%"
+    );
 
 
-    document.getElementById("commissionResult").textContent =
-        money(d.commission);
+    setText(
+        "commissionResult",
+        money(d.commission)
+    );
 
-    document.getElementById("refundLoss").textContent =
-        money(d.refundLoss);
+    setText(
+        "refundLoss",
+        money(d.refundLoss)
+    );
 
-    document.getElementById("totalCost").textContent =
-        money(d.totalCost);
+    setText(
+        "totalCost",
+        money(d.totalCost)
+    );
 
-    document.getElementById("profit").textContent =
-        money(d.profit);
+    setText(
+        "profit",
+        money(d.profit)
+    );
 
-    document.getElementById("margin").textContent =
-        d.margin.toFixed(2) + "%";
+    setText(
+        "margin",
+        d.margin.toFixed(2) + "%"
+    );
 
 
-    document.getElementById("breakEvenPrice").textContent =
-        money(d.breakEvenPrice);
+    setText(
+        "breakEvenPrice",
+        money(d.breakEvenPrice)
+    );
 
-    document.getElementById("breakEvenCAC").textContent =
-        money(Math.max(d.breakEvenCAC,0));
+    setText(
+        "breakEvenCAC",
+        money(Math.max(d.breakEvenCAC,0))
+    );
 
-    document.getElementById("breakEvenROI").textContent =
-        d.breakEvenROI.toFixed(2);
+    setText(
+        "breakEvenROI",
+        d.breakEvenROI.toFixed(2)
+    );
 
-    document.getElementById("breakEvenCVR").textContent =
-        d.breakEvenCVR.toFixed(2) + "%";
+    setText(
+        "breakEvenCVR",
+        d.breakEvenCVR.toFixed(2) + "%"
+    );
 
-    document.getElementById("actualCAC").textContent =
-        money(d.cac);
+    setText(
+        "actualCAC",
+        money(d.adCost)
+    );
 
-    document.getElementById("actualCVR").textContent =
-        d.cvr.toFixed(2) + "%";
+    setText(
+        "actualCVR",
+        d.cvr.toFixed(2) + "%"
+    );
+
+
+    setText(
+        "forecastSales",
+        d.dailySales
+    );
+
+    setText(
+        "dailyProfit",
+        money(d.dailyProfit)
+    );
+
+    setText(
+        "monthlyProfit",
+        money(d.monthlyProfit)
+    );
 
 
     diagnosis(d);
@@ -1554,11 +1709,27 @@ function calculateAll(){
 
     calculateTarget();
 
-    calculateForecast();
-
     updateOverview(d);
 
     updateOptimization();
+
+}
+
+
+/* =====================================================
+   通用设置文字
+===================================================== */
+
+function setText(id,value){
+
+    const el =
+        document.getElementById(id);
+
+    if(el){
+
+        el.textContent = value;
+
+    }
 
 }
 
@@ -1661,13 +1832,19 @@ function diagnosis(d){
     }
 
 
-    document.getElementById("diagnosisStatus").textContent =
-        status;
+    setText(
+        "diagnosisStatus",
+        status
+    );
 
-    document.getElementById("diagnosisText").textContent =
-        text;
+    setText(
+        "diagnosisText",
+        text
+    );
 
-    document.getElementById("diagnosisAdvice").innerHTML =
+    document.getElementById(
+        "diagnosisAdvice"
+    ).innerHTML =
         advice;
 
 }
@@ -1747,17 +1924,25 @@ function health(d){
     }
 
 
-    document.getElementById("overviewCostHealth").textContent =
-        costStatus(costRate);
+    setText(
+        "overviewCostHealth",
+        costStatus(costRate)
+    );
 
-    document.getElementById("overviewAdHealth").textContent =
-        adStatus(adRate);
+    setText(
+        "overviewAdHealth",
+        adStatus(adRate)
+    );
 
-    document.getElementById("overviewShippingHealth").textContent =
-        shippingStatus(shippingRate);
+    setText(
+        "overviewShippingHealth",
+        shippingStatus(shippingRate)
+    );
 
-    document.getElementById("overviewRefundHealth").textContent =
-        refundStatus(d.refundRate);
+    setText(
+        "overviewRefundHealth",
+        refundStatus(d.refundRate)
+    );
 
 }
 
@@ -1769,7 +1954,9 @@ function health(d){
 function calculateTarget(){
 
     const d =
-        calculateProduct(getCurrentData());
+        calculateProduct(
+            getCurrentData()
+        );
 
     const targetProfit =
         num("targetProfit");
@@ -1816,50 +2003,26 @@ function calculateTarget(){
         targetProfit;
 
 
-    document.getElementById("targetPrice").textContent =
-        money(Math.max(targetPrice,0));
+    setText(
+        "targetPrice",
+        money(Math.max(targetPrice,0))
+    );
 
-    document.getElementById("targetAdCost").textContent =
-        money(Math.max(targetAdCost,0));
+    setText(
+        "targetAdCost",
+        money(Math.max(targetAdCost,0))
+    );
 
-    document.getElementById("targetCost").textContent =
-        money(Math.max(targetCost,0));
-
-}
-
-
-/* =====================================================
-   销量预测
-===================================================== */
-
-function calculateForecast(){
-
-    const d =
-        calculateProduct(getCurrentData());
-
-    const dailySales =
-        num("dailySales");
-
-
-    const dailyProfit =
-        d.profit * dailySales;
-
-
-    const monthlyProfit =
-        dailyProfit * 30;
-
-
-    document.getElementById("dailyProfit").textContent =
-        money(dailyProfit);
-
-    document.getElementById("monthlyProfit").textContent =
-        money(monthlyProfit);
+    setText(
+        "targetCost",
+        money(Math.max(targetCost,0))
+    );
 
 }
 
 
 /* =====================================================
-   SKU 计算
+   SKU计算
 ===================================================== */
 
 function calculateSKU(sku){
@@ -1880,9 +2043,13 @@ function calculateSKU(sku){
 
         refundRate:sku.refund,
 
-        tax:sku.tax || 0,
+        tax:sku.tax,
 
-        cpc:sku.cpc || 0
+        cpc:sku.cpc,
+
+        cvr:sku.cvr,
+
+        dailySales:sku.dailySales
 
     });
 
@@ -1890,13 +2057,15 @@ function calculateSKU(sku){
 
 
 /* =====================================================
-   添加 SKU
+   添加 / 更新 SKU
 ===================================================== */
 
 function addSKU(){
 
     const name =
-        document.getElementById("skuName").value.trim();
+        document.getElementById("skuName")
+        .value
+        .trim();
 
 
     if(!name){
@@ -1908,52 +2077,84 @@ function addSKU(){
     }
 
 
-    const sku = {
-
-        id:Date.now(),
+    const data = {
 
         name:name,
 
-        price:Number(
-            document.getElementById("skuPrice").value
-        ) || 0,
+        price:num("skuPrice"),
 
-        cost:Number(
-            document.getElementById("skuCost").value
-        ) || 0,
+        cost:num("skuCost"),
 
-        ad:Number(
-            document.getElementById("skuAd").value
-        ) || 0,
+        commissionRate:num("skuCommission"),
 
-        shipping:Number(
-            document.getElementById("skuShipping").value
-        ) || 0,
+        ad:num("skuAd"),
 
-        refund:Number(
-            document.getElementById("skuRefund").value
-        ) || 0,
+        shipping:num("skuShipping"),
 
-        commissionRate:
-            Number(
-                document.getElementById("commission").value
-            ) || 5,
+        otherCost:num("skuOther"),
 
-        tax:0,
+        refund:num("skuRefund"),
 
-        cpc:
-            Number(
-                document.getElementById("cpc").value
-            ) || 1.5
+        cpc:num("skuCpc"),
+
+        cvr:num("skuCvr"),
+
+        dailySales:num("skuSales"),
+
+        tax:num("skuTax")
 
     };
 
 
-    skuList.push(sku);
+    if(editingSKUId){
 
-    currentSKUId = sku.id;
+        const index =
+            skuList.findIndex(
+                sku => sku.id === editingSKUId
+            );
+
+
+        if(index !== -1){
+
+            skuList[index] =
+                normalizeSKU({
+                    ...skuList[index],
+                    ...data
+                });
+
+            currentSKUId =
+                editingSKUId;
+
+            alert("SKU 已更新！");
+
+        }
+
+    }
+
+    else{
+
+        const sku =
+            normalizeSKU({
+                id:Date.now(),
+                ...data
+            });
+
+
+        skuList.push(sku);
+
+        currentSKUId =
+            sku.id;
+
+        alert("SKU 添加成功！");
+
+    }
+
 
     saveSKUs();
+
+    editingSKUId = null;
+
+    resetSKUForm();
 
     renderSKU();
 
@@ -1961,17 +2162,161 @@ function addSKU(){
 
     syncOptimizationSelect();
 
-    loadSKUIntoProfit(sku);
+    const current =
+        skuList.find(
+            sku => sku.id === currentSKUId
+        );
 
-    updateAll();
 
-    alert("SKU 添加成功！");
+    if(current){
+
+        loadSKUIntoProfit(current);
+
+    }
+
+
+    refreshAllUI();
 
 }
 
 
 /* =====================================================
-   删除 SKU
+   编辑SKU
+===================================================== */
+
+function editSKU(id){
+
+    const sku =
+        skuList.find(
+            item => item.id === id
+        );
+
+
+    if(!sku) return;
+
+
+    editingSKUId = id;
+
+    currentSKUId = id;
+
+
+    document.getElementById("skuName").value =
+        sku.name;
+
+    document.getElementById("skuPrice").value =
+        sku.price;
+
+    document.getElementById("skuCost").value =
+        sku.cost;
+
+    document.getElementById("skuCommission").value =
+        sku.commissionRate;
+
+    document.getElementById("skuAd").value =
+        sku.ad;
+
+    document.getElementById("skuShipping").value =
+        sku.shipping;
+
+    document.getElementById("skuOther").value =
+        sku.otherCost;
+
+    document.getElementById("skuRefund").value =
+        sku.refund;
+
+    document.getElementById("skuCpc").value =
+        sku.cpc;
+
+    document.getElementById("skuCvr").value =
+        sku.cvr;
+
+    document.getElementById("skuSales").value =
+        sku.dailySales;
+
+    document.getElementById("skuTax").value =
+        sku.tax;
+
+
+    document.getElementById(
+        "skuSubmitButton"
+    ).textContent =
+        "💾 保存 SKU 修改";
+
+
+    document.getElementById(
+        "cancelEditButton"
+    ).style.display =
+        "block";
+
+
+    loadSKUIntoProfit(sku);
+
+
+    switchToPageByName("sku");
+
+}
+
+
+/* =====================================================
+   取消编辑
+===================================================== */
+
+function cancelSKUEdit(){
+
+    editingSKUId = null;
+
+    resetSKUForm();
+
+}
+
+
+/* =====================================================
+   重置SKU表单
+===================================================== */
+
+function resetSKUForm(){
+
+    document.getElementById("skuName").value = "";
+
+    document.getElementById("skuPrice").value = 99;
+
+    document.getElementById("skuCost").value = 35;
+
+    document.getElementById("skuCommission").value = 5;
+
+    document.getElementById("skuAd").value = 10;
+
+    document.getElementById("skuShipping").value = 8;
+
+    document.getElementById("skuOther").value = 2;
+
+    document.getElementById("skuRefund").value = 10;
+
+    document.getElementById("skuCpc").value = 1.5;
+
+    document.getElementById("skuCvr").value = 5;
+
+    document.getElementById("skuSales").value = 50;
+
+    document.getElementById("skuTax").value = 0;
+
+
+    document.getElementById(
+        "skuSubmitButton"
+    ).textContent =
+        "＋ 添加 SKU";
+
+
+    document.getElementById(
+        "cancelEditButton"
+    ).style.display =
+        "none";
+
+}
+
+
+/* =====================================================
+   删除SKU
 ===================================================== */
 
 function deleteSKU(id){
@@ -1984,11 +2329,9 @@ function deleteSKU(id){
 
 
     skuList =
-        skuList.filter(function(item){
-
-            return item.id !== id;
-
-        });
+        skuList.filter(
+            sku => sku.id !== id
+        );
 
 
     if(currentSKUId === id){
@@ -2001,6 +2344,13 @@ function deleteSKU(id){
     }
 
 
+    if(!skuList.length){
+
+        currentSKUId = null;
+
+    }
+
+
     saveSKUs();
 
     renderSKU();
@@ -2008,6 +2358,7 @@ function deleteSKU(id){
     syncProfitSelect();
 
     syncOptimizationSelect();
+
 
     if(currentSKUId){
 
@@ -2025,174 +2376,146 @@ function deleteSKU(id){
     }
 
 
-    updateAll();
+    refreshAllUI();
 
 }
 
 
 /* =====================================================
-   编辑 SKU
-===================================================== */
-
-function editSKU(id){
-
-    const sku =
-        skuList.find(
-            item => item.id === id
-        );
-
-
-    if(!sku) return;
-
-
-    currentSKUId = id;
-
-    loadSKUIntoProfit(sku);
-
-    document.getElementById("profitSkuSelect").value =
-        String(id);
-
-
-    document.querySelectorAll(".page")
-        .forEach(el => el.classList.remove("active"));
-
-    document.getElementById("profit")
-        .classList.add("active");
-
-
-    document.querySelectorAll(".nav button")
-        .forEach(el => el.classList.remove("active"));
-
-    document.querySelectorAll(".nav button")[1]
-        .classList.add("active");
-
-}
-
-
-/* =====================================================
-   渲染 SKU
+   SKU渲染
 ===================================================== */
 
 function renderSKU(){
 
     const tbody =
-        document.getElementById("skuTableBody");
+        document.getElementById(
+            "skuTableBody"
+        );
 
 
-    if(skuList.length === 0){
+    if(!skuList.length){
 
         tbody.innerHTML =
             '<tr>' +
-            '<td colspan="10" class="empty">' +
+            '<td colspan="12" class="empty">' +
             '还没有 SKU，先添加一个商品吧' +
             '</td>' +
             '</tr>';
 
-    }
+        updateSKUSummary();
 
-    else{
-
-        tbody.innerHTML = "";
-
-
-        skuList.forEach(function(sku){
-
-            const d =
-                calculateSKU(sku);
-
-
-            let status;
-
-
-            if(d.profit < 0){
-
-                status = "🔴 亏损";
-
-            }
-            else if(d.margin < 10){
-
-                status = "🟠 偏弱";
-
-            }
-            else if(d.margin < 20){
-
-                status = "🟡 一般";
-
-            }
-            else{
-
-                status = "🟢 健康";
-
-            }
-
-
-            const tr =
-                document.createElement("tr");
-
-
-            tr.innerHTML =
-
-                "<td><strong>" +
-                escapeHTML(sku.name) +
-                "</strong></td>" +
-
-                "<td>" +
-                money(sku.price) +
-                "</td>" +
-
-                "<td>" +
-                money(sku.cost) +
-                "</td>" +
-
-                "<td>" +
-                money(sku.ad) +
-                "</td>" +
-
-                "<td>" +
-                money(sku.shipping) +
-                "</td>" +
-
-                "<td class='sku-profit'>" +
-                money(d.profit) +
-                "</td>" +
-
-                "<td>" +
-                d.margin.toFixed(2) +
-                "%" +
-                "</td>" +
-
-                "<td>" +
-                d.roi.toFixed(2) +
-                "</td>" +
-
-                "<td>" +
-                status +
-                "</td>" +
-
-                "<td>" +
-
-                "<button class='edit-button' " +
-                "onclick='editSKU(" +
-                sku.id +
-                ")'>" +
-                "分析" +
-                "</button>" +
-
-                "<button class='danger-button' " +
-                "onclick='deleteSKU(" +
-                sku.id +
-                ")'>" +
-                "删除" +
-                "</button>" +
-
-                "</td>";
-
-
-            tbody.appendChild(tr);
-
-        });
+        return;
 
     }
+
+
+    tbody.innerHTML = "";
+
+
+    skuList.forEach(function(sku){
+
+        const d =
+            calculateSKU(sku);
+
+
+        let status;
+
+
+        if(d.profit < 0){
+
+            status = "🔴 亏损";
+
+        }
+        else if(d.margin < 10){
+
+            status = "🟠 偏弱";
+
+        }
+        else if(d.margin < 20){
+
+            status = "🟡 一般";
+
+        }
+        else{
+
+            status = "🟢 健康";
+
+        }
+
+
+        const tr =
+            document.createElement("tr");
+
+
+        tr.innerHTML =
+
+            "<td><strong>" +
+            escapeHTML(sku.name) +
+            "</strong></td>" +
+
+            "<td>" +
+            money(sku.price) +
+            "</td>" +
+
+            "<td>" +
+            money(sku.cost) +
+            "</td>" +
+
+            "<td>" +
+            money(sku.ad) +
+            "</td>" +
+
+            "<td>" +
+            money(sku.shipping) +
+            "</td>" +
+
+            "<td class='sku-profit'>" +
+            money(d.profit) +
+            "</td>" +
+
+            "<td>" +
+            d.margin.toFixed(2) +
+            "%" +
+            "</td>" +
+
+            "<td>" +
+            d.roi.toFixed(2) +
+            "</td>" +
+
+            "<td>" +
+            d.dailySales +
+            "</td>" +
+
+            "<td>" +
+            money(d.dailyProfit) +
+            "</td>" +
+
+            "<td>" +
+            status +
+            "</td>" +
+
+            "<td>" +
+
+            "<button class='edit-button' " +
+            "onclick='editSKU(" +
+            sku.id +
+            ")'>" +
+            "编辑" +
+            "</button>" +
+
+            "<button class='danger-button' " +
+            "onclick='deleteSKU(" +
+            sku.id +
+            ")'>" +
+            "删除" +
+            "</button>" +
+
+            "</td>";
+
+
+        tbody.appendChild(tr);
+
+    });
 
 
     updateSKUSummary();
@@ -2201,7 +2524,7 @@ function renderSKU(){
 
 
 /* =====================================================
-   SKU 汇总
+   SKU汇总
 ===================================================== */
 
 function updateSKUSummary(){
@@ -2210,29 +2533,41 @@ function updateSKUSummary(){
         skuList.length;
 
 
-    document.getElementById("skuCount").textContent =
-        count;
+    setText(
+        "skuCount",
+        count
+    );
 
-    document.getElementById("overviewSkuCount").textContent =
-        count;
+    setText(
+        "overviewSkuCount",
+        count
+    );
 
-    document.getElementById("overviewSkuCount2").textContent =
-        count;
+    setText(
+        "overviewSkuCount2",
+        count
+    );
 
 
-    if(count === 0){
+    if(!count){
 
-        document.getElementById("bestSku").textContent =
-            "--";
+        setText("bestSku","--");
 
-        document.getElementById("worstSku").textContent =
-            "--";
+        setText("worstSku","--");
 
-        document.getElementById("overviewBestSku").textContent =
-            "--";
+        setText("overviewBestSku","--");
 
-        document.getElementById("overviewWorstSku").textContent =
-            "--";
+        setText("overviewWorstSku","--");
+
+        setText(
+            "totalDailySkuProfit",
+            "¥0.00"
+        );
+
+        setText(
+            "overviewTotalProfit",
+            "¥0.00"
+        );
 
         return;
 
@@ -2253,38 +2588,73 @@ function updateSKUSummary(){
         });
 
 
-    calculated.sort(function(a,b){
-
-        return b.data.profit -
-               a.data.profit;
-
-    });
-
-
     const best =
-        calculated[0];
+        calculated.reduce(
+            (a,b) =>
+                b.data.dailyProfit >
+                a.data.dailyProfit
+                    ? b
+                    : a
+        );
+
 
     const worst =
-        calculated[calculated.length - 1];
+        calculated.reduce(
+            (a,b) =>
+                b.data.profit <
+                a.data.profit
+                    ? b
+                    : a
+        );
 
 
-    document.getElementById("bestSku").textContent =
-        best.sku.name;
+    const totalDailyProfit =
+        calculated.reduce(
+            (sum,item) =>
+                sum + item.data.dailyProfit,
+            0
+        );
 
-    document.getElementById("worstSku").textContent =
-        worst.sku.name;
 
-    document.getElementById("overviewBestSku").textContent =
-        best.sku.name;
+    const totalMonthlyProfit =
+        totalDailyProfit * 30;
 
-    document.getElementById("overviewWorstSku").textContent =
-        worst.sku.name;
+
+    setText(
+        "bestSku",
+        best.sku.name
+    );
+
+    setText(
+        "worstSku",
+        worst.sku.name
+    );
+
+    setText(
+        "overviewBestSku",
+        best.sku.name
+    );
+
+    setText(
+        "overviewWorstSku",
+        worst.sku.name
+    );
+
+    setText(
+        "totalDailySkuProfit",
+        money(totalDailyProfit)
+    );
+
+    setText(
+        "overviewTotalProfit",
+        money(totalMonthlyProfit)
+    );
 
 }
 
 
 /* =====================================================
-   防止 HTML 注入
+   HTML安全
 ===================================================== */
 
 function escapeHTML(str){
@@ -2324,7 +2694,7 @@ function loadSKUIntoProfit(sku){
         sku.cost;
 
     document.getElementById("commission").value =
-        sku.commissionRate ?? 5;
+        sku.commissionRate;
 
     document.getElementById("adCost").value =
         sku.ad;
@@ -2332,17 +2702,191 @@ function loadSKUIntoProfit(sku){
     document.getElementById("shipping").value =
         sku.shipping;
 
+    document.getElementById("otherCost").value =
+        sku.otherCost;
+
     document.getElementById("refundRate").value =
         sku.refund;
 
     document.getElementById("tax").value =
-        sku.tax ?? 0;
+        sku.tax;
 
     document.getElementById("cpc").value =
-        sku.cpc ?? 1.5;
+        sku.cpc;
 
+    document.getElementById("cvr").value =
+        sku.cvr;
+
+    document.getElementById("dailySales").value =
+        sku.dailySales;
+
+
+    syncProfitSelect();
+
+    syncOptimizationSelect();
 
     calculateAll();
+
+}
+
+
+/* =====================================================
+   利润分析 → 保存SKU
+===================================================== */
+
+function saveCurrentAsSKU(){
+
+    const data =
+        getCurrentData();
+
+
+    let name = "";
+
+
+    if(currentSKUId){
+
+        const existing =
+            skuList.find(
+                sku => sku.id === currentSKUId
+            );
+
+        name =
+            prompt(
+                "修改 SKU 名称",
+                existing
+                    ? existing.name
+                    : ""
+            );
+
+    }
+
+    else{
+
+        name =
+            prompt(
+                "请输入新的 SKU 名称",
+                ""
+            );
+
+    }
+
+
+    if(name === null) return;
+
+
+    const cleanName =
+        name.trim();
+
+
+    if(!cleanName){
+
+        alert("SKU 名称不能为空");
+
+        return;
+
+    }
+
+
+    if(currentSKUId){
+
+        const index =
+            skuList.findIndex(
+                sku => sku.id === currentSKUId
+            );
+
+
+        if(index !== -1){
+
+            skuList[index] =
+                normalizeSKU({
+
+                    ...skuList[index],
+
+                    name:cleanName,
+
+                    price:data.price,
+
+                    cost:data.cost,
+
+                    commissionRate:
+                        data.commissionRate,
+
+                    ad:data.adCost,
+
+                    shipping:data.shipping,
+
+                    otherCost:data.otherCost,
+
+                    refund:data.refundRate,
+
+                    tax:data.tax,
+
+                    cpc:data.cpc,
+
+                    cvr:data.cvr,
+
+                    dailySales:data.dailySales
+
+                });
+
+        }
+
+    }
+
+    else{
+
+        const sku =
+            normalizeSKU({
+
+                id:Date.now(),
+
+                name:cleanName,
+
+                price:data.price,
+
+                cost:data.cost,
+
+                commissionRate:
+                    data.commissionRate,
+
+                ad:data.adCost,
+
+                shipping:data.shipping,
+
+                otherCost:data.otherCost,
+
+                refund:data.refundRate,
+
+                tax:data.tax,
+
+                cpc:data.cpc,
+
+                cvr:data.cvr,
+
+                dailySales:data.dailySales
+
+            });
+
+
+        skuList.push(sku);
+
+        currentSKUId =
+            sku.id;
+
+    }
+
+
+    saveSKUs();
+
+    syncProfitSelect();
+
+    syncOptimizationSelect();
+
+    renderSKU();
+
+    refreshAllUI();
+
+    alert("SKU 数据已保存并同步！");
 
 }
 
@@ -2354,11 +2898,12 @@ function loadSKUIntoProfit(sku){
 function syncProfitSelect(){
 
     const select =
-        document.getElementById("profitSkuSelect");
+        document.getElementById(
+            "profitSkuSelect"
+        );
 
 
-    const old =
-        currentSKUId;
+    if(!select) return;
 
 
     select.innerHTML =
@@ -2383,13 +2928,13 @@ function syncProfitSelect(){
     });
 
 
-    if(old &&
+    if(currentSKUId &&
        skuList.some(
-           sku => sku.id === old
+           sku => sku.id === currentSKUId
        )){
 
         select.value =
-            String(old);
+            String(currentSKUId);
 
     }
 
@@ -2399,12 +2944,16 @@ function syncProfitSelect(){
 function loadSelectedSKU(){
 
     const value =
-        document.getElementById("profitSkuSelect").value;
+        document.getElementById(
+            "profitSkuSelect"
+        ).value;
 
 
     if(value === "__manual__"){
 
         currentSKUId = null;
+
+        syncOptimizationSelect();
 
         calculateAll();
 
@@ -2423,145 +2972,13 @@ function loadSelectedSKU(){
 
         loadSKUIntoProfit(sku);
 
-        syncOptimizationSelect();
-
     }
 
 }
 
 
 /* =====================================================
-   利润分析数据 → 保存 SKU
-===================================================== */
-
-function saveCurrentAsSKU(){
-
-    const name =
-        prompt(
-            "请输入 SKU 名称",
-            currentSKUId
-                ? (
-                    skuList.find(
-                        s => s.id === currentSKUId
-                    )?.name || ""
-                )
-                : ""
-        );
-
-
-    if(name === null) return;
-
-
-    const cleanName =
-        name.trim();
-
-
-    if(!cleanName){
-
-        alert("SKU 名称不能为空");
-
-        return;
-
-    }
-
-
-    const data =
-        getCurrentData();
-
-
-    if(currentSKUId){
-
-        const sku =
-            skuList.find(
-                item => item.id === currentSKUId
-            );
-
-
-        if(sku){
-
-            sku.name =
-                cleanName;
-
-            sku.price =
-                data.price;
-
-            sku.cost =
-                data.cost;
-
-            sku.commissionRate =
-                data.commissionRate;
-
-            sku.ad =
-                data.adCost;
-
-            sku.shipping =
-                data.shipping;
-
-            sku.refund =
-                data.refundRate;
-
-            sku.tax =
-                data.tax;
-
-            sku.cpc =
-                data.cpc;
-
-        }
-
-    }
-
-    else{
-
-        const sku = {
-
-            id:Date.now(),
-
-            name:cleanName,
-
-            price:data.price,
-
-            cost:data.cost,
-
-            commissionRate:data.commissionRate,
-
-            ad:data.adCost,
-
-            shipping:data.shipping,
-
-            refund:data.refundRate,
-
-            tax:data.tax,
-
-            cpc:data.cpc
-
-        };
-
-
-        skuList.push(sku);
-
-        currentSKUId =
-            sku.id;
-
-    }
-
-
-    saveSKUs();
-
-    renderSKU();
-
-    syncProfitSelect();
-
-    syncOptimizationSelect();
-
-    updateAll();
-
-    alert("SKU 数据已保存并同步！");
-
-}
-
-
-/* =====================================================
-   优化模块
+   优化选择器
 ===================================================== */
 
 function syncOptimizationSelect(){
@@ -2572,8 +2989,7 @@ function syncOptimizationSelect(){
         );
 
 
-    const old =
-        currentSKUId;
+    if(!select) return;
 
 
     select.innerHTML =
@@ -2598,13 +3014,13 @@ function syncOptimizationSelect(){
     });
 
 
-    if(old &&
+    if(currentSKUId &&
        skuList.some(
-           sku => sku.id === old
+           sku => sku.id === currentSKUId
        )){
 
         select.value =
-            String(old);
+            String(currentSKUId);
 
     }
 
@@ -2637,16 +3053,7 @@ function loadOptimizationSKU(){
     if(!sku) return;
 
 
-    currentSKUId =
-        sku.id;
-
-
     loadSKUIntoProfit(sku);
-
-    document.getElementById(
-        "profitSkuSelect"
-    ).value =
-        String(sku.id);
 
     updateOptimization();
 
@@ -2670,74 +3077,143 @@ function updateOptimization(){
 
 
     const priceProfit =
-        newPrice -
-        d.cost -
-        newPrice * d.commissionRate / 100 -
-        d.adCost -
-        d.shipping -
-        d.otherCost -
-        newPrice * d.refundRate / 100 -
-        d.tax;
+        calculateProduct({
 
+            price:newPrice,
 
-    const newCost =
-        d.cost * 0.90;
+            cost:d.cost,
+
+            commissionRate:d.commissionRate,
+
+            adCost:d.adCost,
+
+            shipping:d.shipping,
+
+            otherCost:d.otherCost,
+
+            refundRate:d.refundRate,
+
+            tax:d.tax,
+
+            cpc:d.cpc,
+
+            cvr:d.cvr,
+
+            dailySales:d.dailySales
+
+        }).profit;
 
 
     const costProfit =
-        d.price -
-        newCost -
-        d.commission -
-        d.adCost -
-        d.shipping -
-        d.otherCost -
-        d.refundLoss -
-        d.tax;
+        calculateProduct({
 
+            price:d.price,
 
-    const newRefundLoss =
-        d.price * 0.05;
+            cost:d.cost * .90,
+
+            commissionRate:d.commissionRate,
+
+            adCost:d.adCost,
+
+            shipping:d.shipping,
+
+            otherCost:d.otherCost,
+
+            refundRate:d.refundRate,
+
+            tax:d.tax,
+
+            cpc:d.cpc,
+
+            cvr:d.cvr,
+
+            dailySales:d.dailySales
+
+        }).profit;
 
 
     const refundProfit =
-        d.price -
-        d.cost -
-        d.commission -
-        d.adCost -
-        d.shipping -
-        d.otherCost -
-        newRefundLoss -
-        d.tax;
+        calculateProduct({
 
+            price:d.price,
 
-    const newAd =
-        d.adCost * 0.80;
+            cost:d.cost,
+
+            commissionRate:d.commissionRate,
+
+            adCost:d.adCost,
+
+            shipping:d.shipping,
+
+            otherCost:d.otherCost,
+
+            refundRate:5,
+
+            tax:d.tax,
+
+            cpc:d.cpc,
+
+            cvr:d.cvr,
+
+            dailySales:d.dailySales
+
+        }).profit;
 
 
     const adProfit =
-        d.price -
-        d.cost -
-        d.commission -
-        newAd -
-        d.shipping -
-        d.otherCost -
-        d.refundLoss -
-        d.tax;
+        calculateProduct({
 
+            price:d.price,
 
-    const newShipping =
-        d.shipping * 0.80;
+            cost:d.cost,
+
+            commissionRate:d.commissionRate,
+
+            adCost:d.adCost * .80,
+
+            shipping:d.shipping,
+
+            otherCost:d.otherCost,
+
+            refundRate:d.refundRate,
+
+            tax:d.tax,
+
+            cpc:d.cpc,
+
+            cvr:d.cvr,
+
+            dailySales:d.dailySales
+
+        }).profit;
 
 
     const shippingProfit =
-        d.price -
-        d.cost -
-        d.commission -
-        d.adCost -
-        newShipping -
-        d.otherCost -
-        d.refundLoss -
-        d.tax;
+        calculateProduct({
+
+            price:d.price,
+
+            cost:d.cost,
+
+            commissionRate:d.commissionRate,
+
+            adCost:d.adCost,
+
+            shipping:d.shipping * .80,
+
+            otherCost:d.otherCost,
+
+            refundRate:d.refundRate,
+
+            tax:d.tax,
+
+            cpc:d.cpc,
+
+            cvr:d.cvr,
+
+            dailySales:d.dailySales
+
+        }).profit;
 
 
     const options = [
@@ -2770,68 +3246,67 @@ function updateOptimization(){
     ];
 
 
-    document.getElementById(
-        "priceOptimization"
-    ).textContent =
-        money(priceProfit);
+    setText(
+        "priceOptimization",
+        money(priceProfit)
+    );
 
-    document.getElementById(
-        "costOptimization"
-    ).textContent =
-        money(costProfit);
+    setText(
+        "costOptimization",
+        money(costProfit)
+    );
 
-    document.getElementById(
-        "refundOptimization"
-    ).textContent =
-        money(refundProfit);
+    setText(
+        "refundOptimization",
+        money(refundProfit)
+    );
 
-    document.getElementById(
-        "adOptimization"
-    ).textContent =
-        money(adProfit);
+    setText(
+        "adOptimization",
+        money(adProfit)
+    );
 
-    document.getElementById(
-        "shippingOptimization"
-    ).textContent =
-        money(shippingProfit);
+    setText(
+        "shippingOptimization",
+        money(shippingProfit)
+    );
 
 
-    document.getElementById(
-        "priceIncrease"
-    ).textContent =
+    setText(
+        "priceIncrease",
         "每单增加 " +
-        money(priceProfit - d.profit);
+        money(priceProfit - d.profit)
+    );
 
-    document.getElementById(
-        "costIncrease"
-    ).textContent =
+    setText(
+        "costIncrease",
         "每单增加 " +
-        money(costProfit - d.profit);
+        money(costProfit - d.profit)
+    );
 
-    document.getElementById(
-        "refundIncrease"
-    ).textContent =
+    setText(
+        "refundIncrease",
         "每单增加 " +
-        money(refundProfit - d.profit);
+        money(refundProfit - d.profit)
+    );
 
-    document.getElementById(
-        "adIncrease"
-    ).textContent =
+    setText(
+        "adIncrease",
         "每单增加 " +
-        money(adProfit - d.profit);
+        money(adProfit - d.profit)
+    );
 
-    document.getElementById(
-        "shippingIncrease"
-    ).textContent =
+    setText(
+        "shippingIncrease",
         "每单增加 " +
-        money(shippingProfit - d.profit);
+        money(shippingProfit - d.profit)
+    );
 
 
-    options.sort(function(a,b){
-
-        return b.profit - a.profit;
-
-    });
+    options.sort(
+        (a,b) =>
+            b.profit - a.profit
+    );
 
 
     const best =
@@ -2847,7 +3322,7 @@ function updateOptimization(){
     ).innerHTML =
 
         "💡 当前最值得优化：<strong>" +
-        best.name +
+        escapeHTML(best.name) +
         "</strong><br>" +
 
         "预计每单利润增加 <strong>" +
@@ -2887,6 +3362,18 @@ function updateOptimization(){
     }
 
 
+    const dailyGain =
+        increase * d.dailySales;
+
+
+    advice +=
+        "<br>📈 按当前日销量 " +
+        d.dailySales +
+        " 单计算，该优化方向理论上每天可增加约 " +
+        money(dailyGain) +
+        " 利润。";
+
+
     document.getElementById(
         "optimizationAdvice"
     ).innerHTML =
@@ -2899,24 +3386,53 @@ function updateOptimization(){
    经营总览
 ===================================================== */
 
-function updateOverview(d){
+function updateOverview(){
 
-    document.getElementById(
-        "overviewProfit"
-    ).textContent =
-        money(d.profit);
+    let d;
 
 
-    document.getElementById(
-        "overviewMargin"
-    ).textContent =
-        d.margin.toFixed(2) + "%";
+    if(currentSKUId){
+
+        const sku =
+            skuList.find(
+                item => item.id === currentSKUId
+            );
 
 
-    document.getElementById(
-        "overviewROI"
-    ).textContent =
-        d.roi.toFixed(2);
+        if(sku){
+
+            d =
+                calculateSKU(sku);
+
+        }
+
+    }
+
+
+    if(!d){
+
+        d =
+            calculateProduct(
+                getCurrentData()
+            );
+
+    }
+
+
+    setText(
+        "overviewProfit",
+        money(d.profit)
+    );
+
+    setText(
+        "overviewMargin",
+        d.margin.toFixed(2) + "%"
+    );
+
+    setText(
+        "overviewROI",
+        d.roi.toFixed(2)
+    );
 
 
     let status;
@@ -3002,16 +3518,15 @@ function updateOverview(d){
     }
 
 
-    document.getElementById(
-        "overviewStatus"
-    ).textContent =
-        status;
+    setText(
+        "overviewStatus",
+        status
+    );
 
-
-    document.getElementById(
-        "overviewAdvice"
-    ).textContent =
-        advice;
+    setText(
+        "overviewAdvice",
+        advice
+    );
 
 
     document.getElementById(
@@ -3021,11 +3536,13 @@ function updateOverview(d){
             ? risks.map(
                 item =>
                     "<li>" +
-                    item +
+                    escapeHTML(item) +
                     "</li>"
               ).join("")
             : "<li>暂无明显经营风险</li>";
 
+
+    health(d);
 
     updateSKUSummary();
 
@@ -3036,15 +3553,7 @@ function updateOverview(d){
    全局刷新
 ===================================================== */
 
-function updateAll(){
-
-    const d =
-        calculateProduct(
-            getCurrentData()
-        );
-
-
-    calculateAll();
+function refreshAllUI(){
 
     renderSKU();
 
@@ -3052,13 +3561,67 @@ function updateAll(){
 
     syncOptimizationSelect();
 
-    updateOverview(d);
+    calculateAll();
+
+    updateOverview();
+
+    updateOptimization();
 
 }
 
 
 /* =====================================================
-   启动
+   切换到指定页面
+===================================================== */
+
+function switchToPageByName(page){
+
+    const pages =
+        document.querySelectorAll(".page");
+
+    pages.forEach(
+        el => el.classList.remove("active")
+    );
+
+
+    document.getElementById(page)
+        .classList.add("active");
+
+
+    const buttons =
+        document.querySelectorAll(".nav button");
+
+
+    buttons.forEach(
+        el => el.classList.remove("active")
+    );
+
+
+    const index = {
+
+        overview:0,
+
+        profit:1,
+
+        sku:2,
+
+        optimization:3
+
+    }[page];
+
+
+    if(index !== undefined &&
+       buttons[index]){
+
+        buttons[index].classList.add("active");
+
+    }
+
+}
+
+
+/* =====================================================
+   初始化
 ===================================================== */
 
 function init(){
@@ -3071,6 +3634,8 @@ function init(){
 
     calculateAll();
 
+    updateOverview();
+
 }
 
 
@@ -3080,3 +3645,4 @@ init();
 
 </body>
 </html>
+```
