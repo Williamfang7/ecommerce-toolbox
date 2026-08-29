@@ -1,5 +1,5 @@
-```html
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,9 @@
 <title>电商经营决策工具 V8</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
@@ -17,7 +19,11 @@ body{
     Arial,"Microsoft YaHei",sans-serif;
 }
 
-button,input,select{font-family:inherit}
+button,
+input,
+select{
+    font-family:inherit;
+}
 
 .app{
     max-width:1150px;
@@ -70,8 +76,13 @@ button,input,select{font-family:inherit}
     color:#fff;
 }
 
-.page{display:none}
-.page.active{display:block}
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
 
 .card{
     background:#fff;
@@ -129,7 +140,8 @@ label{
     color:#374151;
 }
 
-input,select{
+input,
+select{
     width:100%;
     padding:12px 13px;
     border:1px solid #d9dee7;
@@ -138,7 +150,8 @@ input,select{
     background:#fff;
 }
 
-input:focus,select:focus{
+input:focus,
+select:focus{
     outline:none;
     border-color:#111827;
 }
@@ -196,7 +209,7 @@ input:focus,select:focus{
     justify-content:space-between;
     align-items:center;
     gap:20px;
-    padding:11px 0;
+    padding:12px 0;
     border-bottom:1px solid #edf0f3;
 }
 
@@ -295,12 +308,14 @@ input:focus,select:focus{
     display:flex;
     justify-content:space-between;
     padding:9px 0;
+    gap:20px;
 }
 
 .forecast-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
     gap:12px;
+    margin-top:18px;
 }
 
 .forecast-item{
@@ -335,7 +350,7 @@ input:focus,select:focus{
 .sku-table{
     width:100%;
     border-collapse:collapse;
-    min-width:1150px;
+    min-width:950px;
 }
 
 .sku-table th,
@@ -362,7 +377,7 @@ input:focus,select:focus{
 
 .sku-summary{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:12px;
 }
 
@@ -412,13 +427,12 @@ input:focus,select:focus{
 .small-note{
     color:#9ca3af;
     font-size:12px;
-    margin-top:6px;
+    margin-top:8px;
 }
 
 @media(max-width:800px){
 
-    .kpi-grid,
-    .sku-summary{
+    .kpi-grid{
         grid-template-columns:repeat(2,1fr);
     }
 
@@ -461,8 +475,14 @@ input:focus,select:focus{
         flex-direction:column;
         align-items:stretch;
     }
+
+    .target-row{
+        flex-direction:column;
+        gap:5px;
+    }
 }
 </style>
+
 </head>
 
 <body>
@@ -476,136 +496,61 @@ input:focus,select:focus{
 
 <div class="nav">
 
-    <button class="active"
-        onclick="switchPage('overview',this)">
-        🏠 经营总览
-    </button>
+```
+<button class="active"
+    onclick="switchPage('overview',this)">
+    🏠 经营总览
+</button>
 
-    <button
-        onclick="switchPage('profit',this)">
-        💰 利润分析
-    </button>
+<button
+    onclick="switchPage('profit',this)">
+    💰 利润分析
+</button>
 
-    <button
-        onclick="switchPage('sku',this)">
-        📦 SKU管理
-    </button>
+<button
+    onclick="switchPage('sku',this)">
+    📦 SKU管理
+</button>
 
-    <button
-        onclick="switchPage('optimization',this)">
-        🚀 利润优化
-    </button>
+<button
+    onclick="switchPage('optimization',this)">
+    🚀 利润优化
+</button>
+```
 
 </div>
 
-
-<!-- ==================== 经营总览 ==================== -->
+<!-- =========================
+     经营总览
+========================= -->
 
 <div class="page active" id="overview">
 
-    <div class="card">
+```
+<div class="card">
 
-        <h2 class="card-title">🏠 经营总览</h2>
+    <h2 class="card-title">🏠 经营总览</h2>
 
-        <div class="kpi-grid">
+    <div class="kpi-grid">
 
-            <div class="kpi">
-                <div class="kpi-label">当前单件利润</div>
-                <div class="kpi-value" id="overviewProfit">¥0.00</div>
-            </div>
-
-            <div class="kpi">
-                <div class="kpi-label">利润率</div>
-                <div class="kpi-value" id="overviewMargin">0%</div>
-            </div>
-
-            <div class="kpi">
-                <div class="kpi-label">实际 ROI</div>
-                <div class="kpi-value" id="overviewROI">0</div>
-            </div>
-
-            <div class="kpi">
-                <div class="kpi-label">SKU 数量</div>
-                <div class="kpi-value" id="overviewSkuCount">0</div>
-            </div>
-
+        <div class="kpi">
+            <div class="kpi-label">当前单件利润</div>
+            <div class="kpi-value" id="overviewProfit">¥0.00</div>
         </div>
 
-    </div>
-
-
-    <div class="card">
-
-        <h2 class="card-title">📊 当前经营状态</h2>
-
-        <div class="status-box">
-
-            <div class="status-title" id="overviewStatus">
-                正在分析...
-            </div>
-
-            <div id="overviewAdvice"></div>
-
-            <ul id="overviewRisk"></ul>
-
+        <div class="kpi">
+            <div class="kpi-label">利润率</div>
+            <div class="kpi-value" id="overviewMargin">0%</div>
         </div>
 
-    </div>
-
-
-    <div class="card">
-
-        <h2 class="card-title">🔍 成本健康度</h2>
-
-        <div class="health-row">
-            <span>采购成本</span>
-            <strong id="overviewCostHealth">--</strong>
+        <div class="kpi">
+            <div class="kpi-label">实际 ROI</div>
+            <div class="kpi-value" id="overviewROI">0</div>
         </div>
 
-        <div class="health-row">
-            <span>广告成本</span>
-            <strong id="overviewAdHealth">--</strong>
-        </div>
-
-        <div class="health-row">
-            <span>物流成本</span>
-            <strong id="overviewShippingHealth">--</strong>
-        </div>
-
-        <div class="health-row">
-            <span>退款率</span>
-            <strong id="overviewRefundHealth">--</strong>
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2 class="card-title">📦 SKU经营概况</h2>
-
-        <div class="sku-summary">
-
-            <div class="summary-box">
-                <div class="summary-label">SKU数量</div>
-                <div class="summary-value" id="overviewSkuCount2">0</div>
-            </div>
-
-            <div class="summary-box">
-                <div class="summary-label">最赚钱 SKU</div>
-                <div class="summary-value" id="overviewBestSku">--</div>
-            </div>
-
-            <div class="summary-box">
-                <div class="summary-label">最危险 SKU</div>
-                <div class="summary-value" id="overviewWorstSku">--</div>
-            </div>
-
-            <div class="summary-box">
-                <div class="summary-label">SKU总利润</div>
-                <div class="summary-value" id="overviewTotalProfit">¥0.00</div>
-            </div>
-
+        <div class="kpi">
+            <div class="kpi-label">SKU 数量</div>
+            <div class="kpi-value" id="overviewSkuCount">0</div>
         </div>
 
     </div>
@@ -613,301 +558,239 @@ input:focus,select:focus{
 </div>
 
 
-<!-- ==================== 利润分析 ==================== -->
+<div class="card">
+
+    <h2 class="card-title">📊 当前经营状态</h2>
+
+    <div class="status-box">
+
+        <div class="status-title" id="overviewStatus">
+            正在分析...
+        </div>
+
+        <div id="overviewAdvice">
+            正在读取经营数据。
+        </div>
+
+        <ul id="overviewRisk"></ul>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2 class="card-title">🔍 成本健康度</h2>
+
+    <div class="health-row">
+        <span>采购成本</span>
+        <strong id="overviewCostHealth">--</strong>
+    </div>
+
+    <div class="health-row">
+        <span>广告成本</span>
+        <strong id="overviewAdHealth">--</strong>
+    </div>
+
+    <div class="health-row">
+        <span>物流成本</span>
+        <strong id="overviewShippingHealth">--</strong>
+    </div>
+
+    <div class="health-row">
+        <span>退款率</span>
+        <strong id="overviewRefundHealth">--</strong>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2 class="card-title">📦 SKU经营概况</h2>
+
+    <div class="sku-summary">
+
+        <div class="summary-box">
+            <div class="summary-label">SKU数量</div>
+            <div class="summary-value" id="overviewSkuCount2">0</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-label">最赚钱 SKU</div>
+            <div class="summary-value" id="overviewBestSku">--</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-label">最危险 SKU</div>
+            <div class="summary-value" id="overviewWorstSku">--</div>
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- =========================
+     利润分析
+========================= -->
 
 <div class="page" id="profit">
 
-    <div class="card">
+```
+<div class="card">
 
-        <h2 class="card-title">💰 利润分析</h2>
+    <h2 class="card-title">💰 利润分析</h2>
 
-        <div class="sync-note">
-            🔄 选择 SKU 后，所有数据会自动载入。修改后可保存回 SKU。
-        </div>
-
-        <div class="selector-box">
-
-            <div class="input-group">
-
-                <label>选择分析商品</label>
-
-                <select id="profitSkuSelect"
-                        onchange="loadSelectedSKU()">
-
-                    <option value="__manual__">
-                        手动输入 / 通用商品
-                    </option>
-
-                </select>
-
-            </div>
-
-            <button class="secondary-button"
-                    onclick="saveCurrentAsSKU()">
-                💾 保存到 SKU
-            </button>
-
-        </div>
-
-
-        <div class="input-grid">
-
-            <div class="input-group">
-                <label>商品售价（元）</label>
-                <input id="price" type="number" value="99"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>采购成本（元）</label>
-                <input id="cost" type="number" value="35"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>平台佣金（%）</label>
-                <input id="commission" type="number" value="5"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>广告费用（元）</label>
-                <input id="adCost" type="number" value="10"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>物流成本（元）</label>
-                <input id="shipping" type="number" value="8"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>其他成本（元）</label>
-                <input id="otherCost" type="number" value="2"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>CPC（元）</label>
-                <input id="cpc" type="number" value="1.5"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>广告点击率 CTR（%）</label>
-                <input id="ctr" type="number" value="2"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>转化率 CVR（%）</label>
-                <input id="cvr" type="number" value="5"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>退款率（%）</label>
-                <input id="refundRate" type="number" value="10"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>税费（元）</label>
-                <input id="tax" type="number" value="0"
-                    step="0.01" oninput="calculateAll()">
-            </div>
-
-            <div class="input-group">
-                <label>每天销量（单）</label>
-                <input id="dailySales" type="number" value="50"
-                    step="1" oninput="calculateAll()">
-            </div>
-
-        </div>
-
-        <button class="main-button"
-                onclick="calculateAll()">
-            🔄 重新分析
-        </button>
-
+    <div class="sync-note">
+        🔄 输入数据后自动计算，也可以直接选择已经保存的 SKU。
     </div>
 
-
-    <div class="card">
-
-        <h2 class="card-title">📌 核心指标</h2>
-
-        <div class="kpi-grid">
-
-            <div class="kpi">
-                <div class="kpi-label">单件利润</div>
-                <div class="kpi-value" id="coreProfit">¥0.00</div>
-            </div>
-
-            <div class="kpi">
-                <div class="kpi-label">利润率</div>
-                <div class="kpi-value" id="coreMargin">0%</div>
-            </div>
-
-            <div class="kpi">
-                <div class="kpi-label">实际 ROI</div>
-                <div class="kpi-value" id="coreROI">0</div>
-            </div>
-
-            <div class="kpi">
-                <div class="kpi-label">广告占比</div>
-                <div class="kpi-value" id="coreAdRate">0%</div>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2 class="card-title">📊 利润结果</h2>
-
-        <div class="result-row">
-            <span>平台佣金</span>
-            <strong id="commissionResult">¥0.00</strong>
-        </div>
-
-        <div class="result-row">
-            <span>预计退款损失</span>
-            <strong id="refundLoss">¥0.00</strong>
-        </div>
-
-        <div class="result-row">
-            <span>总成本</span>
-            <strong id="totalCost">¥0.00</strong>
-        </div>
-
-        <div class="result-row">
-            <span>实际利润</span>
-            <strong class="profit-value" id="profit">¥0.00</strong>
-        </div>
-
-        <div class="result-row">
-            <span>利润率</span>
-            <strong id="margin">0%</strong>
-        </div>
-
-        <hr class="divider">
-
-        <div class="result-row">
-            <span>保本售价</span>
-            <strong id="breakEvenPrice">¥0.00</strong>
-        </div>
-
-        <div class="result-row">
-            <span>保本广告费</span>
-            <strong id="breakEvenCAC">¥0.00</strong>
-        </div>
-
-        <div class="result-row">
-            <span>保本 ROI</span>
-            <strong id="breakEvenROI">0</strong>
-        </div>
-
-        <div class="result-row">
-            <span>理论广告 CVR</span>
-            <strong id="breakEvenCVR">0%</strong>
-        </div>
-
-        <div class="result-row">
-            <span>当前广告成本 / 单</span>
-            <strong id="actualCAC">¥0.00</strong>
-        </div>
-
-        <div class="result-row">
-            <span>当前 CVR</span>
-            <strong id="actualCVR">0%</strong>
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2 class="card-title">📊 盈利诊断</h2>
-
-        <div class="status-box">
-
-            <div class="status-title" id="diagnosisStatus">
-                正在分析...
-            </div>
-
-            <div class="status-text" id="diagnosisText"></div>
-
-            <div class="status-advice" id="diagnosisAdvice"></div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <h2 class="card-title">🎯 目标利润反推</h2>
+    <div class="selector-box">
 
         <div class="input-group">
 
-            <label>希望每单至少赚多少钱（元）</label>
+            <label>选择分析商品</label>
 
-            <input
-                type="number"
-                id="targetProfit"
-                value="30"
-                step="0.01"
-                oninput="calculateTarget()">
+            <select id="profitSkuSelect"
+                    onchange="loadSelectedSKU()">
 
-        </div>
+                <option value="__manual__">
+                    手动输入 / 通用商品
+                </option>
 
-        <div class="target-result">
-
-            <div class="target-row">
-                <span>达到目标利润所需售价</span>
-                <strong id="targetPrice">¥0.00</strong>
-            </div>
-
-            <div class="target-row">
-                <span>当前售价下最高广告费</span>
-                <strong id="targetAdCost">¥0.00</strong>
-            </div>
-
-            <div class="target-row">
-                <span>当前售价下最高采购成本</span>
-                <strong id="targetCost">¥0.00</strong>
-            </div>
+            </select>
 
         </div>
+
+        <button class="secondary-button"
+                onclick="saveCurrentAsSKU()">
+            💾 保存到 SKU
+        </button>
 
     </div>
 
 
-    <div class="card">
+    <div class="input-grid">
 
-        <h2 class="card-title">📈 销量利润预测</h2>
+        <div class="input-group">
+            <label>商品售价（元）</label>
+            <input id="price"
+                   type="number"
+                   value="99"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
 
-        <div class="forecast-grid">
+        <div class="input-group">
+            <label>采购成本（元）</label>
+            <input id="cost"
+                   type="number"
+                   value="35"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
 
-            <div class="forecast-item">
-                <div class="forecast-label">每日销量</div>
-                <div class="forecast-value" id="forecastSales">0</div>
-            </div>
+        <div class="input-group">
+            <label>平台佣金（%）</label>
+            <input id="commission"
+                   type="number"
+                   value="5"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
 
-            <div class="forecast-item">
-                <div class="forecast-label">每日利润</div>
-                <div class="forecast-value" id="dailyProfit">¥0.00</div>
-            </div>
+        <div class="input-group">
+            <label>广告费用（元）</label>
+            <input id="adCost"
+                   type="number"
+                   value="10"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
 
-            <div class="forecast-item">
-                <div class="forecast-label">每月利润</div>
-                <div class="forecast-value" id="monthlyProfit">¥0.00</div>
-            </div>
+        <div class="input-group">
+            <label>物流成本（元）</label>
+            <input id="shipping"
+                   type="number"
+                   value="8"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
 
+        <div class="input-group">
+            <label>其他成本（元）</label>
+            <input id="otherCost"
+                   type="number"
+                   value="2"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
+
+        <div class="input-group">
+            <label>CPC（元）</label>
+            <input id="cpc"
+                   type="number"
+                   value="1.5"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
+
+        <div class="input-group">
+            <label>退款率（%）</label>
+            <input id="refundRate"
+                   type="number"
+                   value="10"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
+
+        <div class="input-group">
+            <label>税费（元）</label>
+            <input id="tax"
+                   type="number"
+                   value="0"
+                   step="0.01"
+                   oninput="calculateAll()">
+        </div>
+
+    </div>
+
+    <button class="main-button"
+            onclick="calculateAll()">
+        🔄 重新分析
+    </button>
+
+</div>
+
+
+<div class="card">
+
+    <h2 class="card-title">📌 核心指标</h2>
+
+    <div class="kpi-grid">
+
+        <div class="kpi">
+            <div class="kpi-label">单件利润</div>
+            <div class="kpi-value" id="coreProfit">¥0.00</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">利润率</div>
+            <div class="kpi-value" id="coreMargin">0%</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">实际 ROI</div>
+            <div class="kpi-value" id="coreROI">0</div>
+        </div>
+
+        <div class="kpi">
+            <div class="kpi-label">广告占比</div>
+            <div class="kpi-value" id="coreAdRate">0%</div>
         </div>
 
     </div>
@@ -915,349 +798,457 @@ input:focus,select:focus{
 </div>
 
 
-<!-- ==================== SKU管理 ==================== -->
+<div class="card">
+
+    <h2 class="card-title">📊 利润结果</h2>
+
+    <div class="result-row">
+        <span>平台佣金</span>
+        <strong id="commissionResult">¥0.00</strong>
+    </div>
+
+    <div class="result-row">
+        <span>预计退款损失</span>
+        <strong id="refundLoss">¥0.00</strong>
+    </div>
+
+    <div class="result-row">
+        <span>总成本</span>
+        <strong id="totalCost">¥0.00</strong>
+    </div>
+
+    <div class="result-row">
+        <span>实际利润</span>
+        <strong class="profit-value" id="profit">¥0.00</strong>
+    </div>
+
+    <div class="result-row">
+        <span>利润率</span>
+        <strong id="margin">0%</strong>
+    </div>
+
+    <hr class="divider">
+
+    <div class="result-row">
+        <span>保本售价</span>
+        <strong id="breakEvenPrice">¥0.00</strong>
+    </div>
+
+    <div class="result-row">
+        <span>保本广告费</span>
+        <strong id="breakEvenCAC">¥0.00</strong>
+    </div>
+
+    <div class="result-row">
+        <span>保本 ROI</span>
+        <strong id="breakEvenROI">0</strong>
+    </div>
+
+    <div class="result-row">
+        <span>实际广告成本</span>
+        <strong id="actualCAC">¥0.00</strong>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2 class="card-title">📊 盈利诊断</h2>
+
+    <div class="status-box">
+
+        <div class="status-title" id="diagnosisStatus">
+            正在分析...
+        </div>
+
+        <div class="status-text" id="diagnosisText">
+        </div>
+
+        <div class="status-advice" id="diagnosisAdvice">
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2 class="card-title">🎯 目标利润反推</h2>
+
+    <div class="input-group">
+
+        <label>希望每单至少赚多少钱（元）</label>
+
+        <input type="number"
+               id="targetProfit"
+               value="30"
+               step="0.01"
+               oninput="calculateTarget()">
+
+    </div>
+
+    <div class="target-result">
+
+        <div class="target-row">
+            <span>达到目标利润所需售价</span>
+            <strong id="targetPrice">¥0.00</strong>
+        </div>
+
+        <div class="target-row">
+            <span>当前售价下最高广告费</span>
+            <strong id="targetAdCost">¥0.00</strong>
+        </div>
+
+        <div class="target-row">
+            <span>当前售价下最高采购成本</span>
+            <strong id="targetCost">¥0.00</strong>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2 class="card-title">📈 销量利润预测</h2>
+
+    <div class="input-group">
+
+        <label>预计每天销量（单）</label>
+
+        <input type="number"
+               id="dailySales"
+               value="50"
+               step="1"
+               oninput="calculateForecast()">
+
+    </div>
+
+    <div class="forecast-grid">
+
+        <div class="forecast-item">
+
+            <div class="forecast-label">
+                每日利润
+            </div>
+
+            <div class="forecast-value"
+                 id="dailyProfit">
+                ¥0.00
+            </div>
+
+        </div>
+
+        <div class="forecast-item">
+
+            <div class="forecast-label">
+                每月利润
+            </div>
+
+            <div class="forecast-value"
+                 id="monthlyProfit">
+                ¥0.00
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- =========================
+     SKU管理
+========================= -->
 
 <div class="page" id="sku">
 
-    <div class="card">
+```
+<div class="card">
 
-        <h2 class="card-title">📦 SKU管理</h2>
+    <h2 class="card-title">📦 SKU管理</h2>
 
-        <div class="sync-note">
-            💡 SKU 是整个工具的数据中心。这里的数据会同步到经营总览、利润分析和利润优化。
+    <div class="sync-note">
+        💡 SKU 是整个工具的数据中心。添加后会自动同步到经营总览、利润分析和利润优化。
+    </div>
+
+    <div class="sku-form">
+
+        <div class="input-group">
+            <label>SKU名称</label>
+            <input id="skuName"
+                   type="text"
+                   placeholder="例如：蓝色款">
         </div>
 
-        <div class="sku-form">
-
-            <div class="input-group">
-                <label>SKU名称</label>
-                <input id="skuName"
-                    type="text"
-                    placeholder="例如：蓝色款">
-            </div>
-
-            <div class="input-group">
-                <label>售价（元）</label>
-                <input id="skuPrice"
-                    type="number"
-                    value="99"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>采购成本（元）</label>
-                <input id="skuCost"
-                    type="number"
-                    value="35"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>平台佣金（%）</label>
-                <input id="skuCommission"
-                    type="number"
-                    value="5"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>广告费用（元）</label>
-                <input id="skuAd"
-                    type="number"
-                    value="10"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>物流成本（元）</label>
-                <input id="skuShipping"
-                    type="number"
-                    value="8"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>其他成本（元）</label>
-                <input id="skuOther"
-                    type="number"
-                    value="2"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>退款率（%）</label>
-                <input id="skuRefund"
-                    type="number"
-                    value="10"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>CPC（元）</label>
-                <input id="skuCpc"
-                    type="number"
-                    value="1.5"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>CVR（%）</label>
-                <input id="skuCvr"
-                    type="number"
-                    value="5"
-                    step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>每天销量（单）</label>
-                <input id="skuSales"
-                    type="number"
-                    value="50"
-                    step="1">
-            </div>
-
-            <div class="input-group">
-                <label>税费（元）</label>
-                <input id="skuTax"
-                    type="number"
-                    value="0"
-                    step="0.01">
-            </div>
-
+        <div class="input-group">
+            <label>售价（元）</label>
+            <input id="skuPrice"
+                   type="number"
+                   value="99"
+                   step="0.01">
         </div>
 
-        <button class="main-button"
-                id="skuSubmitButton"
-                onclick="addSKU()">
-            ＋ 添加 SKU
-        </button>
+        <div class="input-group">
+            <label>采购成本（元）</label>
+            <input id="skuCost"
+                   type="number"
+                   value="35"
+                   step="0.01">
+        </div>
 
-        <button
-            class="secondary-button"
-            id="cancelEditButton"
-            onclick="cancelSKUEdit()"
-            style="display:none;width:100%;margin-top:10px;">
-            取消编辑
-        </button>
+        <div class="input-group">
+            <label>广告费用（元）</label>
+            <input id="skuAd"
+                   type="number"
+                   value="10"
+                   step="0.01">
+        </div>
 
+        <div class="input-group">
+            <label>物流成本（元）</label>
+            <input id="skuShipping"
+                   type="number"
+                   value="8"
+                   step="0.01">
+        </div>
 
-        <div class="sku-table-wrap">
-
-            <table class="sku-table">
-
-                <thead>
-                <tr>
-                    <th>SKU</th>
-                    <th>售价</th>
-                    <th>采购</th>
-                    <th>广告</th>
-                    <th>物流</th>
-                    <th>利润</th>
-                    <th>利润率</th>
-                    <th>ROI</th>
-                    <th>日销量</th>
-                    <th>日利润</th>
-                    <th>状态</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-
-                <tbody id="skuTableBody"></tbody>
-
-            </table>
-
+        <div class="input-group">
+            <label>退款率（%）</label>
+            <input id="skuRefund"
+                   type="number"
+                   value="10"
+                   step="0.01">
         </div>
 
     </div>
 
+    <button class="main-button"
+            onclick="addSKU()">
+        ＋ 添加 SKU
+    </button>
 
-    <div class="card">
 
-        <h2 class="card-title">📊 SKU经营分析</h2>
+    <div class="sku-table-wrap">
 
-        <div class="sku-summary">
+        <table class="sku-table">
 
-            <div class="summary-box">
-                <div class="summary-label">SKU总数</div>
-                <div class="summary-value" id="skuCount">0</div>
-            </div>
+            <thead>
 
-            <div class="summary-box">
-                <div class="summary-label">最赚钱 SKU</div>
-                <div class="summary-value" id="bestSku">--</div>
-            </div>
+            <tr>
+                <th>SKU</th>
+                <th>售价</th>
+                <th>采购</th>
+                <th>广告</th>
+                <th>物流</th>
+                <th>利润</th>
+                <th>利润率</th>
+                <th>ROI</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
 
-            <div class="summary-box">
-                <div class="summary-label">最危险 SKU</div>
-                <div class="summary-value" id="worstSku">--</div>
-            </div>
+            </thead>
 
-            <div class="summary-box">
-                <div class="summary-label">全部SKU每日利润</div>
-                <div class="summary-value" id="totalDailySkuProfit">¥0.00</div>
-            </div>
+            <tbody id="skuTableBody"></tbody>
 
-        </div>
+        </table>
 
     </div>
 
 </div>
 
 
-<!-- ==================== 利润优化 ==================== -->
+<div class="card">
+
+    <h2 class="card-title">📊 SKU经营分析</h2>
+
+    <div class="sku-summary">
+
+        <div class="summary-box">
+            <div class="summary-label">SKU总数</div>
+            <div class="summary-value" id="skuCount">0</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-label">最赚钱 SKU</div>
+            <div class="summary-value" id="bestSku">--</div>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-label">最危险 SKU</div>
+            <div class="summary-value" id="worstSku">--</div>
+        </div>
+
+    </div>
+
+</div>
+```
+
+</div>
+
+<!-- =========================
+     利润优化
+========================= -->
 
 <div class="page" id="optimization">
 
-    <div class="card">
+```
+<div class="card">
 
-        <h2 class="card-title">🚀 利润优化</h2>
+    <h2 class="card-title">🚀 利润优化</h2>
 
-        <div class="sync-note">
-            🔄 优化分析自动读取当前选择的 SKU。
-        </div>
+    <div class="sync-note">
+        🔄 优化分析会读取当前利润分析商品的数据。
+    </div>
 
-        <div class="selector-box">
+    <div class="selector-box">
 
-            <div class="input-group">
+        <div class="input-group">
 
-                <label>优化对象</label>
+            <label>优化对象</label>
 
-                <select id="optimizationSkuSelect"
-                        onchange="loadOptimizationSKU()">
+            <select id="optimizationSkuSelect"
+                    onchange="loadOptimizationSKU()">
 
-                    <option value="__manual__">
-                        当前利润分析商品
-                    </option>
+                <option value="__manual__">
+                    当前利润分析商品
+                </option>
 
-                </select>
+            </select>
 
-            </div>
-
-        </div>
-
-
-        <div class="optimization-grid">
-
-            <div class="optimization-item">
-
-                <div class="optimization-name">
-                    售价提高 5%
-                </div>
-
-                <div class="optimization-profit"
-                     id="priceOptimization">
-                    ¥0.00
-                </div>
-
-                <div class="optimization-increase"
-                     id="priceIncrease">
-                    --
-                </div>
-
-            </div>
-
-
-            <div class="optimization-item">
-
-                <div class="optimization-name">
-                    采购成本降低 10%
-                </div>
-
-                <div class="optimization-profit"
-                     id="costOptimization">
-                    ¥0.00
-                </div>
-
-                <div class="optimization-increase"
-                     id="costIncrease">
-                    --
-                </div>
-
-            </div>
-
-
-            <div class="optimization-item">
-
-                <div class="optimization-name">
-                    退款率降至 5%
-                </div>
-
-                <div class="optimization-profit"
-                     id="refundOptimization">
-                    ¥0.00
-                </div>
-
-                <div class="optimization-increase"
-                     id="refundIncrease">
-                    --
-                </div>
-
-            </div>
-
-
-            <div class="optimization-item">
-
-                <div class="optimization-name">
-                    广告费用降低 20%
-                </div>
-
-                <div class="optimization-profit"
-                     id="adOptimization">
-                    ¥0.00
-                </div>
-
-                <div class="optimization-increase"
-                     id="adIncrease">
-                    --
-                </div>
-
-            </div>
-
-
-            <div class="optimization-item">
-
-                <div class="optimization-name">
-                    物流成本降低 20%
-                </div>
-
-                <div class="optimization-profit"
-                     id="shippingOptimization">
-                    ¥0.00
-                </div>
-
-                <div class="optimization-increase"
-                     id="shippingIncrease">
-                    --
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="best-box"
-             id="bestOptimization">
-            💡 正在分析最值得优化的方向...
         </div>
 
     </div>
 
 
-    <div class="card">
+    <div class="optimization-grid">
 
-        <h2 class="card-title">🎯 经营决策建议</h2>
+        <div class="optimization-item">
 
-        <div class="status-box"
-             id="optimizationAdvice">
-            正在分析。
+            <div class="optimization-name">
+                售价提高 5%
+            </div>
+
+            <div class="optimization-profit"
+                 id="priceOptimization">
+                ¥0.00
+            </div>
+
+            <div class="optimization-increase"
+                 id="priceIncrease">
+                --
+            </div>
+
+        </div>
+
+
+        <div class="optimization-item">
+
+            <div class="optimization-name">
+                采购成本降低 10%
+            </div>
+
+            <div class="optimization-profit"
+                 id="costOptimization">
+                ¥0.00
+            </div>
+
+            <div class="optimization-increase"
+                 id="costIncrease">
+                --
+            </div>
+
+        </div>
+
+
+        <div class="optimization-item">
+
+            <div class="optimization-name">
+                退款率降至 5%
+            </div>
+
+            <div class="optimization-profit"
+                 id="refundOptimization">
+                ¥0.00
+            </div>
+
+            <div class="optimization-increase"
+                 id="refundIncrease">
+                --
+            </div>
+
+        </div>
+
+
+        <div class="optimization-item">
+
+            <div class="optimization-name">
+                广告费用降低 20%
+            </div>
+
+            <div class="optimization-profit"
+                 id="adOptimization">
+                ¥0.00
+            </div>
+
+            <div class="optimization-increase"
+                 id="adIncrease">
+                --
+            </div>
+
+        </div>
+
+
+        <div class="optimization-item">
+
+            <div class="optimization-name">
+                物流成本降低 20%
+            </div>
+
+            <div class="optimization-profit"
+                 id="shippingOptimization">
+                ¥0.00
+            </div>
+
+            <div class="optimization-increase"
+                 id="shippingIncrease">
+                --
+            </div>
+
         </div>
 
     </div>
 
-</div>
+
+    <div class="best-box"
+         id="bestOptimization">
+        💡 正在分析最值得优化的方向...
+    </div>
 
 </div>
 
+
+<div class="card">
+
+    <h2 class="card-title">🎯 经营决策建议</h2>
+
+    <div class="status-box"
+         id="optimizationAdvice">
+        正在分析。
+    </div>
+
+</div>
+```
+
+</div>
+
+</div>
 
 <script>
 
@@ -1271,21 +1262,20 @@ let skuList = loadSKUs();
 
 let currentSKUId = null;
 
-let editingSKUId = null;
-
 
 /* =====================================================
-   基础工具
+   基础函数
 ===================================================== */
 
 function num(id){
 
     const el = document.getElementById(id);
 
-    if(!el) return 0;
+    if(!el){
+        return 0;
+    }
 
     return Number(el.value) || 0;
-
 }
 
 
@@ -1305,9 +1295,9 @@ function loadSKUs(){
                 localStorage.getItem(STORAGE_KEY) || "[]"
             );
 
-        if(!Array.isArray(data)) return [];
-
-        return data.map(normalizeSKU);
+        return Array.isArray(data)
+            ? data
+            : [];
 
     }catch(e){
 
@@ -1318,47 +1308,24 @@ function loadSKUs(){
 }
 
 
-function normalizeSKU(sku){
-
-    return {
-
-        id:sku.id || Date.now(),
-
-        name:sku.name || "未命名 SKU",
-
-        price:Number(sku.price) || 0,
-
-        cost:Number(sku.cost) || 0,
-
-        commissionRate:Number(sku.commissionRate) || 5,
-
-        ad:Number(sku.ad) || 0,
-
-        shipping:Number(sku.shipping) || 0,
-
-        otherCost:Number(sku.otherCost) || 0,
-
-        refund:Number(sku.refund) || 0,
-
-        tax:Number(sku.tax) || 0,
-
-        cpc:Number(sku.cpc) || 0,
-
-        cvr:Number(sku.cvr) || 5,
-
-        dailySales:Number(sku.dailySales) || 0
-
-    };
-
-}
-
-
 function saveSKUs(){
 
     localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify(skuList)
     );
+
+}
+
+
+function escapeHTML(str){
+
+    return String(str)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
@@ -1382,9 +1349,7 @@ function switchPage(page,button){
         document.getElementById(page);
 
     if(target){
-
         target.classList.add("active");
-
     }
 
 
@@ -1398,19 +1363,32 @@ function switchPage(page,button){
 
 
     if(button){
-
         button.classList.add("active");
-
     }
 
 
-    refreshAllUI();
+    if(page === "overview"){
+        updateOverview();
+    }
+
+    if(page === "profit"){
+        calculateAll();
+    }
+
+    if(page === "sku"){
+        renderSKU();
+    }
+
+    if(page === "optimization"){
+        syncOptimizationSelect();
+        updateOptimization();
+    }
 
 }
 
 
 /* =====================================================
-   商品统一计算
+   核心计算
 ===================================================== */
 
 function calculateProduct(data){
@@ -1439,19 +1417,9 @@ function calculateProduct(data){
     const tax =
         Number(data.tax) || 0;
 
-    const cpc =
-        Number(data.cpc) || 0;
-
-    const cvr =
-        Number(data.cvr) || 0;
-
-    const dailySales =
-        Number(data.dailySales) || 0;
-
 
     const commission =
         price * commissionRate / 100;
-
 
     const refundLoss =
         price * refundRate / 100;
@@ -1483,7 +1451,7 @@ function calculateProduct(data){
             : 0;
 
 
-    const denominator =
+    const fixedRate =
         1 -
         commissionRate / 100 -
         refundRate / 100;
@@ -1497,8 +1465,8 @@ function calculateProduct(data){
 
 
     const breakEvenPrice =
-        denominator > 0
-            ? (fixedCost + adCost) / denominator
+        fixedRate > 0
+            ? (fixedCost + adCost) / fixedRate
             : 0;
 
 
@@ -1510,26 +1478,6 @@ function calculateProduct(data){
         otherCost -
         refundLoss -
         tax;
-
-
-    const breakEvenROI =
-        breakEvenCAC > 0
-            ? price / breakEvenCAC
-            : 0;
-
-
-    const breakEvenCVR =
-        cpc > 0 && breakEvenCAC > 0
-            ? cpc / breakEvenCAC * 100
-            : 0;
-
-
-    const dailyProfit =
-        profit * dailySales;
-
-
-    const monthlyProfit =
-        dailyProfit * 30;
 
 
     return {
@@ -1544,19 +1492,12 @@ function calculateProduct(data){
         refundRate,
         refundLoss,
         tax,
-        cpc,
-        cvr,
-        dailySales,
         totalCost,
         profit,
         margin,
         roi,
         breakEvenPrice,
-        breakEvenCAC,
-        breakEvenROI,
-        breakEvenCVR,
-        dailyProfit,
-        monthlyProfit
+        breakEvenCAC
 
     };
 
@@ -1585,13 +1526,7 @@ function getCurrentData(){
 
         refundRate:num("refundRate"),
 
-        tax:num("tax"),
-
-        cpc:num("cpc"),
-
-        cvr:num("cvr"),
-
-        dailySales:num("dailySales")
+        tax:num("tax")
 
     };
 
@@ -1604,132 +1539,69 @@ function getCurrentData(){
 
 function calculateAll(){
 
+    const data =
+        getCurrentData();
+
     const d =
-        calculateProduct(
-            getCurrentData()
-        );
+        calculateProduct(data);
 
 
-    setText("coreProfit",money(d.profit));
+    document.getElementById("coreProfit").textContent =
+        money(d.profit);
 
-    setText(
-        "coreMargin",
-        d.margin.toFixed(2) + "%"
-    );
+    document.getElementById("coreMargin").textContent =
+        d.margin.toFixed(2) + "%";
 
-    setText(
-        "coreROI",
-        d.roi.toFixed(2)
-    );
+    document.getElementById("coreROI").textContent =
+        d.roi.toFixed(2);
 
-    setText(
-        "coreAdRate",
+    document.getElementById("coreAdRate").textContent =
         d.price > 0
             ? (d.adCost / d.price * 100).toFixed(2) + "%"
-            : "0%"
-    );
+            : "0%";
 
 
-    setText(
-        "commissionResult",
-        money(d.commission)
-    );
+    document.getElementById("commissionResult").textContent =
+        money(d.commission);
 
-    setText(
-        "refundLoss",
-        money(d.refundLoss)
-    );
+    document.getElementById("refundLoss").textContent =
+        money(d.refundLoss);
 
-    setText(
-        "totalCost",
-        money(d.totalCost)
-    );
+    document.getElementById("totalCost").textContent =
+        money(d.totalCost);
 
-    setText(
-        "profit",
-        money(d.profit)
-    );
+    document.getElementById("profit").textContent =
+        money(d.profit);
 
-    setText(
-        "margin",
-        d.margin.toFixed(2) + "%"
-    );
+    document.getElementById("margin").textContent =
+        d.margin.toFixed(2) + "%";
 
 
-    setText(
-        "breakEvenPrice",
-        money(d.breakEvenPrice)
-    );
+    document.getElementById("breakEvenPrice").textContent =
+        money(d.breakEvenPrice);
 
-    setText(
-        "breakEvenCAC",
-        money(Math.max(d.breakEvenCAC,0))
-    );
+    document.getElementById("breakEvenCAC").textContent =
+        money(Math.max(d.breakEvenCAC,0));
 
-    setText(
-        "breakEvenROI",
-        d.breakEvenROI.toFixed(2)
-    );
-
-    setText(
-        "breakEvenCVR",
-        d.breakEvenCVR.toFixed(2) + "%"
-    );
-
-    setText(
-        "actualCAC",
-        money(d.adCost)
-    );
-
-    setText(
-        "actualCVR",
-        d.cvr.toFixed(2) + "%"
-    );
+    document.getElementById("breakEvenROI").textContent =
+        d.breakEvenCAC > 0
+            ? (d.price / d.breakEvenCAC).toFixed(2)
+            : "0";
 
 
-    setText(
-        "forecastSales",
-        d.dailySales
-    );
-
-    setText(
-        "dailyProfit",
-        money(d.dailyProfit)
-    );
-
-    setText(
-        "monthlyProfit",
-        money(d.monthlyProfit)
-    );
+    document.getElementById("actualCAC").textContent =
+        money(d.adCost);
 
 
     diagnosis(d);
 
-    health(d);
-
     calculateTarget();
 
-    updateOverview(d);
+    calculateForecast();
 
     updateOptimization();
 
-}
-
-
-/* =====================================================
-   通用设置文字
-===================================================== */
-
-function setText(id,value){
-
-    const el =
-        document.getElementById(id);
-
-    if(el){
-
-        el.textContent = value;
-
-    }
+    updateOverview();
 
 }
 
@@ -1740,14 +1612,15 @@ function setText(id,value){
 
 function diagnosis(d){
 
-    let status;
-    let text;
-    let advice;
+    let status = "";
+    let text = "";
+    let advice = "";
 
 
     if(d.profit < 0){
 
-        status = "🔴 当前处于亏损状态";
+        status =
+            "🔴 当前处于亏损状态";
 
         text =
             "当前每卖出一件商品都会产生亏损，不建议继续扩大广告投入。";
@@ -1759,7 +1632,8 @@ function diagnosis(d){
 
     else if(d.margin < 10){
 
-        status = "🟠 盈利能力较弱";
+        status =
+            "🟠 盈利能力较弱";
 
         text =
             "目前虽然盈利，但利润空间非常薄，成本稍有变化就可能进入亏损。";
@@ -1771,7 +1645,8 @@ function diagnosis(d){
 
     else if(d.margin < 20){
 
-        status = "🟡 盈利能力一般";
+        status =
+            "🟡 盈利能力一般";
 
         text =
             "当前商品具备盈利能力，但利润率仍有提升空间。";
@@ -1783,7 +1658,8 @@ function diagnosis(d){
 
     else if(d.margin < 30){
 
-        status = "🟢 盈利状态健康";
+        status =
+            "🟢 盈利状态健康";
 
         text =
             "当前利润率较为健康，商品具备一定经营空间。";
@@ -1795,7 +1671,8 @@ function diagnosis(d){
 
     else{
 
-        status = "🟢 盈利能力优秀";
+        status =
+            "🟢 盈利能力优秀";
 
         text =
             "当前商品利润空间较好，具备较强盈利能力。";
@@ -1832,117 +1709,17 @@ function diagnosis(d){
     }
 
 
-    setText(
-        "diagnosisStatus",
-        status
-    );
+    document.getElementById(
+        "diagnosisStatus"
+    ).textContent = status;
 
-    setText(
-        "diagnosisText",
-        text
-    );
+    document.getElementById(
+        "diagnosisText"
+    ).textContent = text;
 
     document.getElementById(
         "diagnosisAdvice"
-    ).innerHTML =
-        advice;
-
-}
-
-
-/* =====================================================
-   成本健康度
-===================================================== */
-
-function health(d){
-
-    const costRate =
-        d.price > 0
-            ? d.cost / d.price * 100
-            : 0;
-
-    const adRate =
-        d.price > 0
-            ? d.adCost / d.price * 100
-            : 0;
-
-    const shippingRate =
-        d.price > 0
-            ? d.shipping / d.price * 100
-            : 0;
-
-
-    function costStatus(rate){
-
-        if(rate <= 40)
-            return "🟢 健康 " + rate.toFixed(2) + "%";
-
-        if(rate <= 50)
-            return "🟡 偏高 " + rate.toFixed(2) + "%";
-
-        return "🔴 很高 " + rate.toFixed(2) + "%";
-
-    }
-
-
-    function adStatus(rate){
-
-        if(rate <= 10)
-            return "🟢 健康 " + rate.toFixed(2) + "%";
-
-        if(rate <= 20)
-            return "🟡 偏高 " + rate.toFixed(2) + "%";
-
-        return "🔴 很高 " + rate.toFixed(2) + "%";
-
-    }
-
-
-    function shippingStatus(rate){
-
-        if(rate <= 10)
-            return "🟢 健康 " + rate.toFixed(2) + "%";
-
-        if(rate <= 15)
-            return "🟡 偏高 " + rate.toFixed(2) + "%";
-
-        return "🔴 很高 " + rate.toFixed(2) + "%";
-
-    }
-
-
-    function refundStatus(rate){
-
-        if(rate <= 5)
-            return "🟢 优秀 " + rate.toFixed(2) + "%";
-
-        if(rate <= 10)
-            return "🟡 注意 " + rate.toFixed(2) + "%";
-
-        return "🔴 偏高 " + rate.toFixed(2) + "%";
-
-    }
-
-
-    setText(
-        "overviewCostHealth",
-        costStatus(costRate)
-    );
-
-    setText(
-        "overviewAdHealth",
-        adStatus(adRate)
-    );
-
-    setText(
-        "overviewShippingHealth",
-        shippingStatus(shippingRate)
-    );
-
-    setText(
-        "overviewRefundHealth",
-        refundStatus(d.refundRate)
-    );
+    ).innerHTML = advice;
 
 }
 
@@ -1958,7 +1735,8 @@ function calculateTarget(){
             getCurrentData()
         );
 
-    const targetProfit =
+
+    const target =
         num("targetProfit");
 
 
@@ -1976,7 +1754,7 @@ function calculateTarget(){
                 d.shipping +
                 d.otherCost +
                 d.tax +
-                targetProfit
+                target
             ) / denominator
             : 0;
 
@@ -1989,7 +1767,7 @@ function calculateTarget(){
         d.otherCost -
         d.refundLoss -
         d.tax -
-        targetProfit;
+        target;
 
 
     const targetCost =
@@ -2000,23 +1778,50 @@ function calculateTarget(){
         d.otherCost -
         d.refundLoss -
         d.tax -
-        targetProfit;
+        target;
 
 
-    setText(
-        "targetPrice",
-        money(Math.max(targetPrice,0))
-    );
+    document.getElementById("targetPrice").textContent =
+        money(Math.max(targetPrice,0));
 
-    setText(
-        "targetAdCost",
-        money(Math.max(targetAdCost,0))
-    );
+    document.getElementById("targetAdCost").textContent =
+        money(Math.max(targetAdCost,0));
 
-    setText(
-        "targetCost",
-        money(Math.max(targetCost,0))
-    );
+    document.getElementById("targetCost").textContent =
+        money(Math.max(targetCost,0));
+
+}
+
+
+/* =====================================================
+   销量预测
+===================================================== */
+
+function calculateForecast(){
+
+    const d =
+        calculateProduct(
+            getCurrentData()
+        );
+
+
+    const sales =
+        num("dailySales");
+
+
+    const daily =
+        d.profit * sales;
+
+
+    const monthly =
+        daily * 30;
+
+
+    document.getElementById("dailyProfit").textContent =
+        money(daily);
+
+    document.getElementById("monthlyProfit").textContent =
+        money(monthly);
 
 }
 
@@ -2039,17 +1844,11 @@ function calculateSKU(sku){
 
         shipping:sku.shipping,
 
-        otherCost:sku.otherCost,
+        otherCost:sku.otherCost || 0,
 
         refundRate:sku.refund,
 
-        tax:sku.tax,
-
-        cpc:sku.cpc,
-
-        cvr:sku.cvr,
-
-        dailySales:sku.dailySales
+        tax:sku.tax || 0
 
     });
 
@@ -2057,13 +1856,14 @@ function calculateSKU(sku){
 
 
 /* =====================================================
-   添加 / 更新 SKU
+   添加SKU
 ===================================================== */
 
 function addSKU(){
 
     const name =
-        document.getElementById("skuName")
+        document
+        .getElementById("skuName")
         .value
         .trim();
 
@@ -2077,84 +1877,54 @@ function addSKU(){
     }
 
 
-    const data = {
+    const sku = {
+
+        id:Date.now(),
 
         name:name,
 
-        price:num("skuPrice"),
+        price:Number(
+            document.getElementById("skuPrice").value
+        ) || 0,
 
-        cost:num("skuCost"),
+        cost:Number(
+            document.getElementById("skuCost").value
+        ) || 0,
 
-        commissionRate:num("skuCommission"),
+        ad:Number(
+            document.getElementById("skuAd").value
+        ) || 0,
 
-        ad:num("skuAd"),
+        shipping:Number(
+            document.getElementById("skuShipping").value
+        ) || 0,
 
-        shipping:num("skuShipping"),
+        refund:Number(
+            document.getElementById("skuRefund").value
+        ) || 0,
 
-        otherCost:num("skuOther"),
+        commissionRate:Number(
+            document.getElementById("commission").value
+        ) || 5,
 
-        refund:num("skuRefund"),
+        otherCost:Number(
+            document.getElementById("otherCost").value
+        ) || 0,
 
-        cpc:num("skuCpc"),
-
-        cvr:num("skuCvr"),
-
-        dailySales:num("skuSales"),
-
-        tax:num("skuTax")
+        tax:Number(
+            document.getElementById("tax").value
+        ) || 0
 
     };
 
 
-    if(editingSKUId){
+    skuList.push(sku);
 
-        const index =
-            skuList.findIndex(
-                sku => sku.id === editingSKUId
-            );
-
-
-        if(index !== -1){
-
-            skuList[index] =
-                normalizeSKU({
-                    ...skuList[index],
-                    ...data
-                });
-
-            currentSKUId =
-                editingSKUId;
-
-            alert("SKU 已更新！");
-
-        }
-
-    }
-
-    else{
-
-        const sku =
-            normalizeSKU({
-                id:Date.now(),
-                ...data
-            });
-
-
-        skuList.push(sku);
-
-        currentSKUId =
-            sku.id;
-
-        alert("SKU 添加成功！");
-
-    }
+    currentSKUId =
+        sku.id;
 
 
     saveSKUs();
-
-    editingSKUId = null;
-
-    resetSKUForm();
 
     renderSKU();
 
@@ -2162,155 +1932,9 @@ function addSKU(){
 
     syncOptimizationSelect();
 
-    const current =
-        skuList.find(
-            sku => sku.id === currentSKUId
-        );
-
-
-    if(current){
-
-        loadSKUIntoProfit(current);
-
-    }
-
-
-    refreshAllUI();
-
-}
-
-
-/* =====================================================
-   编辑SKU
-===================================================== */
-
-function editSKU(id){
-
-    const sku =
-        skuList.find(
-            item => item.id === id
-        );
-
-
-    if(!sku) return;
-
-
-    editingSKUId = id;
-
-    currentSKUId = id;
-
-
-    document.getElementById("skuName").value =
-        sku.name;
-
-    document.getElementById("skuPrice").value =
-        sku.price;
-
-    document.getElementById("skuCost").value =
-        sku.cost;
-
-    document.getElementById("skuCommission").value =
-        sku.commissionRate;
-
-    document.getElementById("skuAd").value =
-        sku.ad;
-
-    document.getElementById("skuShipping").value =
-        sku.shipping;
-
-    document.getElementById("skuOther").value =
-        sku.otherCost;
-
-    document.getElementById("skuRefund").value =
-        sku.refund;
-
-    document.getElementById("skuCpc").value =
-        sku.cpc;
-
-    document.getElementById("skuCvr").value =
-        sku.cvr;
-
-    document.getElementById("skuSales").value =
-        sku.dailySales;
-
-    document.getElementById("skuTax").value =
-        sku.tax;
-
-
-    document.getElementById(
-        "skuSubmitButton"
-    ).textContent =
-        "💾 保存 SKU 修改";
-
-
-    document.getElementById(
-        "cancelEditButton"
-    ).style.display =
-        "block";
-
-
     loadSKUIntoProfit(sku);
 
-
-    switchToPageByName("sku");
-
-}
-
-
-/* =====================================================
-   取消编辑
-===================================================== */
-
-function cancelSKUEdit(){
-
-    editingSKUId = null;
-
-    resetSKUForm();
-
-}
-
-
-/* =====================================================
-   重置SKU表单
-===================================================== */
-
-function resetSKUForm(){
-
-    document.getElementById("skuName").value = "";
-
-    document.getElementById("skuPrice").value = 99;
-
-    document.getElementById("skuCost").value = 35;
-
-    document.getElementById("skuCommission").value = 5;
-
-    document.getElementById("skuAd").value = 10;
-
-    document.getElementById("skuShipping").value = 8;
-
-    document.getElementById("skuOther").value = 2;
-
-    document.getElementById("skuRefund").value = 10;
-
-    document.getElementById("skuCpc").value = 1.5;
-
-    document.getElementById("skuCvr").value = 5;
-
-    document.getElementById("skuSales").value = 50;
-
-    document.getElementById("skuTax").value = 0;
-
-
-    document.getElementById(
-        "skuSubmitButton"
-    ).textContent =
-        "＋ 添加 SKU";
-
-
-    document.getElementById(
-        "cancelEditButton"
-    ).style.display =
-        "none";
+    alert("SKU 添加成功！");
 
 }
 
@@ -2322,16 +1946,14 @@ function resetSKUForm(){
 function deleteSKU(id){
 
     if(!confirm("确定删除这个 SKU 吗？")){
-
         return;
-
     }
 
 
     skuList =
-        skuList.filter(
-            sku => sku.id !== id
-        );
+        skuList.filter(function(item){
+            return item.id !== id;
+        });
 
 
     if(currentSKUId === id){
@@ -2340,13 +1962,6 @@ function deleteSKU(id){
             skuList.length
                 ? skuList[0].id
                 : null;
-
-    }
-
-
-    if(!skuList.length){
-
-        currentSKUId = null;
 
     }
 
@@ -2368,154 +1983,211 @@ function deleteSKU(id){
             );
 
         if(sku){
-
             loadSKUIntoProfit(sku);
-
         }
 
     }
+    else{
 
+        calculateAll();
 
-    refreshAllUI();
+    }
 
 }
 
 
 /* =====================================================
-   SKU渲染
+   SKU → 利润分析
+===================================================== */
+
+function loadSKUIntoProfit(sku){
+
+    if(!sku){
+        return;
+    }
+
+
+    currentSKUId =
+        sku.id;
+
+
+    document.getElementById("price").value =
+        sku.price;
+
+    document.getElementById("cost").value =
+        sku.cost;
+
+    document.getElementById("commission").value =
+        sku.commissionRate ?? 5;
+
+    document.getElementById("adCost").value =
+        sku.ad;
+
+    document.getElementById("shipping").value =
+        sku.shipping;
+
+    document.getElementById("otherCost").value =
+        sku.otherCost ?? 0;
+
+    document.getElementById("refundRate").value =
+        sku.refund;
+
+    document.getElementById("tax").value =
+        sku.tax ?? 0;
+
+
+    syncProfitSelect();
+
+    syncOptimizationSelect();
+
+    calculateAll();
+
+}
+
+
+/* =====================================================
+   分析SKU
+===================================================== */
+
+function editSKU(id){
+
+    const sku =
+        skuList.find(
+            item => item.id === id
+        );
+
+
+    if(!sku){
+        return;
+    }
+
+
+    loadSKUIntoProfit(sku);
+
+
+    switchPage(
+        "profit",
+        document.querySelectorAll(".nav button")[1]
+    );
+
+}
+
+
+/* =====================================================
+   渲染SKU
 ===================================================== */
 
 function renderSKU(){
 
     const tbody =
-        document.getElementById(
-            "skuTableBody"
-        );
+        document.getElementById("skuTableBody");
 
 
-    if(!skuList.length){
+    if(skuList.length === 0){
 
         tbody.innerHTML =
             '<tr>' +
-            '<td colspan="12" class="empty">' +
+            '<td colspan="10" class="empty">' +
             '还没有 SKU，先添加一个商品吧' +
             '</td>' +
             '</tr>';
 
-        updateSKUSummary();
+    }
+    else{
 
-        return;
+        tbody.innerHTML = "";
+
+
+        skuList.forEach(function(sku){
+
+            const d =
+                calculateSKU(sku);
+
+
+            let status;
+
+
+            if(d.profit < 0){
+                status = "🔴 亏损";
+            }
+            else if(d.margin < 10){
+                status = "🟠 偏弱";
+            }
+            else if(d.margin < 20){
+                status = "🟡 一般";
+            }
+            else{
+                status = "🟢 健康";
+            }
+
+
+            const tr =
+                document.createElement("tr");
+
+
+            tr.innerHTML =
+
+                "<td><strong>" +
+                escapeHTML(sku.name) +
+                "</strong></td>" +
+
+                "<td>" +
+                money(sku.price) +
+                "</td>" +
+
+                "<td>" +
+                money(sku.cost) +
+                "</td>" +
+
+                "<td>" +
+                money(sku.ad) +
+                "</td>" +
+
+                "<td>" +
+                money(sku.shipping) +
+                "</td>" +
+
+                "<td class='sku-profit'>" +
+                money(d.profit) +
+                "</td>" +
+
+                "<td>" +
+                d.margin.toFixed(2) +
+                "%" +
+                "</td>" +
+
+                "<td>" +
+                d.roi.toFixed(2) +
+                "</td>" +
+
+                "<td>" +
+                status +
+                "</td>" +
+
+                "<td>" +
+
+                "<button class='edit-button' " +
+                "onclick='editSKU(" +
+                sku.id +
+                ")'>" +
+                "分析" +
+                "</button>" +
+
+                "<button class='danger-button' " +
+                "onclick='deleteSKU(" +
+                sku.id +
+                ")'>" +
+                "删除" +
+                "</button>" +
+
+                "</td>";
+
+
+            tbody.appendChild(tr);
+
+        });
 
     }
-
-
-    tbody.innerHTML = "";
-
-
-    skuList.forEach(function(sku){
-
-        const d =
-            calculateSKU(sku);
-
-
-        let status;
-
-
-        if(d.profit < 0){
-
-            status = "🔴 亏损";
-
-        }
-        else if(d.margin < 10){
-
-            status = "🟠 偏弱";
-
-        }
-        else if(d.margin < 20){
-
-            status = "🟡 一般";
-
-        }
-        else{
-
-            status = "🟢 健康";
-
-        }
-
-
-        const tr =
-            document.createElement("tr");
-
-
-        tr.innerHTML =
-
-            "<td><strong>" +
-            escapeHTML(sku.name) +
-            "</strong></td>" +
-
-            "<td>" +
-            money(sku.price) +
-            "</td>" +
-
-            "<td>" +
-            money(sku.cost) +
-            "</td>" +
-
-            "<td>" +
-            money(sku.ad) +
-            "</td>" +
-
-            "<td>" +
-            money(sku.shipping) +
-            "</td>" +
-
-            "<td class='sku-profit'>" +
-            money(d.profit) +
-            "</td>" +
-
-            "<td>" +
-            d.margin.toFixed(2) +
-            "%" +
-            "</td>" +
-
-            "<td>" +
-            d.roi.toFixed(2) +
-            "</td>" +
-
-            "<td>" +
-            d.dailySales +
-            "</td>" +
-
-            "<td>" +
-            money(d.dailyProfit) +
-            "</td>" +
-
-            "<td>" +
-            status +
-            "</td>" +
-
-            "<td>" +
-
-            "<button class='edit-button' " +
-            "onclick='editSKU(" +
-            sku.id +
-            ")'>" +
-            "编辑" +
-            "</button>" +
-
-            "<button class='danger-button' " +
-            "onclick='deleteSKU(" +
-            sku.id +
-            ")'>" +
-            "删除" +
-            "</button>" +
-
-            "</td>";
-
-
-        tbody.appendChild(tr);
-
-    });
 
 
     updateSKUSummary();
@@ -2533,41 +2205,29 @@ function updateSKUSummary(){
         skuList.length;
 
 
-    setText(
-        "skuCount",
-        count
-    );
+    document.getElementById("skuCount").textContent =
+        count;
 
-    setText(
-        "overviewSkuCount",
-        count
-    );
+    document.getElementById("overviewSkuCount").textContent =
+        count;
 
-    setText(
-        "overviewSkuCount2",
-        count
-    );
+    document.getElementById("overviewSkuCount2").textContent =
+        count;
 
 
-    if(!count){
+    if(count === 0){
 
-        setText("bestSku","--");
+        document.getElementById("bestSku").textContent =
+            "--";
 
-        setText("worstSku","--");
+        document.getElementById("worstSku").textContent =
+            "--";
 
-        setText("overviewBestSku","--");
+        document.getElementById("overviewBestSku").textContent =
+            "--";
 
-        setText("overviewWorstSku","--");
-
-        setText(
-            "totalDailySkuProfit",
-            "¥0.00"
-        );
-
-        setText(
-            "overviewTotalProfit",
-            "¥0.00"
-        );
+        document.getElementById("overviewWorstSku").textContent =
+            "--";
 
         return;
 
@@ -2578,315 +2238,39 @@ function updateSKUSummary(){
         skuList.map(function(sku){
 
             return {
-
                 sku:sku,
-
                 data:calculateSKU(sku)
-
             };
 
         });
 
 
-    const best =
-        calculated.reduce(
-            (a,b) =>
-                b.data.dailyProfit >
-                a.data.dailyProfit
-                    ? b
-                    : a
-        );
+    calculated.sort(function(a,b){
 
+        return b.data.profit -
+               a.data.profit;
+
+    });
+
+
+    const best =
+        calculated[0];
 
     const worst =
-        calculated.reduce(
-            (a,b) =>
-                b.data.profit <
-                a.data.profit
-                    ? b
-                    : a
-        );
+        calculated[calculated.length - 1];
 
 
-    const totalDailyProfit =
-        calculated.reduce(
-            (sum,item) =>
-                sum + item.data.dailyProfit,
-            0
-        );
+    document.getElementById("bestSku").textContent =
+        best.sku.name;
 
+    document.getElementById("worstSku").textContent =
+        worst.sku.name;
 
-    const totalMonthlyProfit =
-        totalDailyProfit * 30;
+    document.getElementById("overviewBestSku").textContent =
+        best.sku.name;
 
-
-    setText(
-        "bestSku",
-        best.sku.name
-    );
-
-    setText(
-        "worstSku",
-        worst.sku.name
-    );
-
-    setText(
-        "overviewBestSku",
-        best.sku.name
-    );
-
-    setText(
-        "overviewWorstSku",
-        worst.sku.name
-    );
-
-    setText(
-        "totalDailySkuProfit",
-        money(totalDailyProfit)
-    );
-
-    setText(
-        "overviewTotalProfit",
-        money(totalMonthlyProfit)
-    );
-
-}
-
-
-/* =====================================================
-   HTML安全
-===================================================== */
-
-function escapeHTML(str){
-
-    return String(str)
-
-        .replace(/&/g,"&amp;")
-
-        .replace(/</g,"&lt;")
-
-        .replace(/>/g,"&gt;")
-
-        .replace(/"/g,"&quot;")
-
-        .replace(/'/g,"&#039;");
-
-}
-
-
-/* =====================================================
-   SKU → 利润分析
-===================================================== */
-
-function loadSKUIntoProfit(sku){
-
-    if(!sku) return;
-
-
-    currentSKUId =
-        sku.id;
-
-
-    document.getElementById("price").value =
-        sku.price;
-
-    document.getElementById("cost").value =
-        sku.cost;
-
-    document.getElementById("commission").value =
-        sku.commissionRate;
-
-    document.getElementById("adCost").value =
-        sku.ad;
-
-    document.getElementById("shipping").value =
-        sku.shipping;
-
-    document.getElementById("otherCost").value =
-        sku.otherCost;
-
-    document.getElementById("refundRate").value =
-        sku.refund;
-
-    document.getElementById("tax").value =
-        sku.tax;
-
-    document.getElementById("cpc").value =
-        sku.cpc;
-
-    document.getElementById("cvr").value =
-        sku.cvr;
-
-    document.getElementById("dailySales").value =
-        sku.dailySales;
-
-
-    syncProfitSelect();
-
-    syncOptimizationSelect();
-
-    calculateAll();
-
-}
-
-
-/* =====================================================
-   利润分析 → 保存SKU
-===================================================== */
-
-function saveCurrentAsSKU(){
-
-    const data =
-        getCurrentData();
-
-
-    let name = "";
-
-
-    if(currentSKUId){
-
-        const existing =
-            skuList.find(
-                sku => sku.id === currentSKUId
-            );
-
-        name =
-            prompt(
-                "修改 SKU 名称",
-                existing
-                    ? existing.name
-                    : ""
-            );
-
-    }
-
-    else{
-
-        name =
-            prompt(
-                "请输入新的 SKU 名称",
-                ""
-            );
-
-    }
-
-
-    if(name === null) return;
-
-
-    const cleanName =
-        name.trim();
-
-
-    if(!cleanName){
-
-        alert("SKU 名称不能为空");
-
-        return;
-
-    }
-
-
-    if(currentSKUId){
-
-        const index =
-            skuList.findIndex(
-                sku => sku.id === currentSKUId
-            );
-
-
-        if(index !== -1){
-
-            skuList[index] =
-                normalizeSKU({
-
-                    ...skuList[index],
-
-                    name:cleanName,
-
-                    price:data.price,
-
-                    cost:data.cost,
-
-                    commissionRate:
-                        data.commissionRate,
-
-                    ad:data.adCost,
-
-                    shipping:data.shipping,
-
-                    otherCost:data.otherCost,
-
-                    refund:data.refundRate,
-
-                    tax:data.tax,
-
-                    cpc:data.cpc,
-
-                    cvr:data.cvr,
-
-                    dailySales:data.dailySales
-
-                });
-
-        }
-
-    }
-
-    else{
-
-        const sku =
-            normalizeSKU({
-
-                id:Date.now(),
-
-                name:cleanName,
-
-                price:data.price,
-
-                cost:data.cost,
-
-                commissionRate:
-                    data.commissionRate,
-
-                ad:data.adCost,
-
-                shipping:data.shipping,
-
-                otherCost:data.otherCost,
-
-                refund:data.refundRate,
-
-                tax:data.tax,
-
-                cpc:data.cpc,
-
-                cvr:data.cvr,
-
-                dailySales:data.dailySales
-
-            });
-
-
-        skuList.push(sku);
-
-        currentSKUId =
-            sku.id;
-
-    }
-
-
-    saveSKUs();
-
-    syncProfitSelect();
-
-    syncOptimizationSelect();
-
-    renderSKU();
-
-    refreshAllUI();
-
-    alert("SKU 数据已保存并同步！");
+    document.getElementById("overviewWorstSku").textContent =
+        worst.sku.name;
 
 }
 
@@ -2903,7 +2287,8 @@ function syncProfitSelect(){
         );
 
 
-    if(!select) return;
+    const selected =
+        currentSKUId;
 
 
     select.innerHTML =
@@ -2928,18 +2313,24 @@ function syncProfitSelect(){
     });
 
 
-    if(currentSKUId &&
-       skuList.some(
-           sku => sku.id === currentSKUId
-       )){
+    if(
+        selected &&
+        skuList.some(
+            sku => sku.id === selected
+        )
+    ){
 
         select.value =
-            String(currentSKUId);
+            String(selected);
 
     }
 
 }
 
+
+/* =====================================================
+   选择利润分析SKU
+===================================================== */
 
 function loadSelectedSKU(){
 
@@ -2952,8 +2343,6 @@ function loadSelectedSKU(){
     if(value === "__manual__"){
 
         currentSKUId = null;
-
-        syncOptimizationSelect();
 
         calculateAll();
 
@@ -2978,6 +2367,149 @@ function loadSelectedSKU(){
 
 
 /* =====================================================
+   保存 / 更新SKU
+===================================================== */
+
+function saveCurrentAsSKU(){
+
+    const data =
+        getCurrentData();
+
+
+    let name = "";
+
+
+    if(currentSKUId){
+
+        const old =
+            skuList.find(
+                item => item.id === currentSKUId
+            );
+
+        name =
+            old
+                ? old.name
+                : "";
+
+    }
+
+
+    name =
+        prompt(
+            "请输入 SKU 名称",
+            name
+        );
+
+
+    if(name === null){
+        return;
+    }
+
+
+    name =
+        name.trim();
+
+
+    if(!name){
+
+        alert("SKU 名称不能为空");
+
+        return;
+
+    }
+
+
+    if(currentSKUId){
+
+        const sku =
+            skuList.find(
+                item => item.id === currentSKUId
+            );
+
+
+        if(sku){
+
+            sku.name =
+                name;
+
+            sku.price =
+                data.price;
+
+            sku.cost =
+                data.cost;
+
+            sku.commissionRate =
+                data.commissionRate;
+
+            sku.ad =
+                data.adCost;
+
+            sku.shipping =
+                data.shipping;
+
+            sku.otherCost =
+                data.otherCost;
+
+            sku.refund =
+                data.refundRate;
+
+            sku.tax =
+                data.tax;
+
+        }
+
+    }
+    else{
+
+        const sku = {
+
+            id:Date.now(),
+
+            name:name,
+
+            price:data.price,
+
+            cost:data.cost,
+
+            commissionRate:data.commissionRate,
+
+            ad:data.adCost,
+
+            shipping:data.shipping,
+
+            otherCost:data.otherCost,
+
+            refund:data.refundRate,
+
+            tax:data.tax
+
+        };
+
+
+        skuList.push(sku);
+
+        currentSKUId =
+            sku.id;
+
+    }
+
+
+    saveSKUs();
+
+    syncProfitSelect();
+
+    syncOptimizationSelect();
+
+    renderSKU();
+
+    calculateAll();
+
+    alert("SKU 数据已保存并同步！");
+
+}
+
+
+/* =====================================================
    优化选择器
 ===================================================== */
 
@@ -2987,9 +2519,6 @@ function syncOptimizationSelect(){
         document.getElementById(
             "optimizationSkuSelect"
         );
-
-
-    if(!select) return;
 
 
     select.innerHTML =
@@ -3014,10 +2543,12 @@ function syncOptimizationSelect(){
     });
 
 
-    if(currentSKUId &&
-       skuList.some(
-           sku => sku.id === currentSKUId
-       )){
+    if(
+        currentSKUId &&
+        skuList.some(
+            sku => sku.id === currentSKUId
+        )
+    ){
 
         select.value =
             String(currentSKUId);
@@ -3026,6 +2557,10 @@ function syncOptimizationSelect(){
 
 }
 
+
+/* =====================================================
+   优化SKU选择
+===================================================== */
 
 function loadOptimizationSKU(){
 
@@ -3050,7 +2585,9 @@ function loadOptimizationSKU(){
         );
 
 
-    if(!sku) return;
+    if(!sku){
+        return;
+    }
 
 
     loadSKUIntoProfit(sku);
@@ -3072,14 +2609,10 @@ function updateOptimization(){
         );
 
 
-    const newPrice =
-        d.price * 1.05;
-
-
     const priceProfit =
         calculateProduct({
 
-            price:newPrice,
+            price:d.price * 1.05,
 
             cost:d.cost,
 
@@ -3093,13 +2626,7 @@ function updateOptimization(){
 
             refundRate:d.refundRate,
 
-            tax:d.tax,
-
-            cpc:d.cpc,
-
-            cvr:d.cvr,
-
-            dailySales:d.dailySales
+            tax:d.tax
 
         }).profit;
 
@@ -3121,13 +2648,7 @@ function updateOptimization(){
 
             refundRate:d.refundRate,
 
-            tax:d.tax,
-
-            cpc:d.cpc,
-
-            cvr:d.cvr,
-
-            dailySales:d.dailySales
+            tax:d.tax
 
         }).profit;
 
@@ -3149,13 +2670,7 @@ function updateOptimization(){
 
             refundRate:5,
 
-            tax:d.tax,
-
-            cpc:d.cpc,
-
-            cvr:d.cvr,
-
-            dailySales:d.dailySales
+            tax:d.tax
 
         }).profit;
 
@@ -3177,13 +2692,7 @@ function updateOptimization(){
 
             refundRate:d.refundRate,
 
-            tax:d.tax,
-
-            cpc:d.cpc,
-
-            cvr:d.cvr,
-
-            dailySales:d.dailySales
+            tax:d.tax
 
         }).profit;
 
@@ -3205,13 +2714,7 @@ function updateOptimization(){
 
             refundRate:d.refundRate,
 
-            tax:d.tax,
-
-            cpc:d.cpc,
-
-            cvr:d.cvr,
-
-            dailySales:d.dailySales
+            tax:d.tax
 
         }).profit;
 
@@ -3246,67 +2749,77 @@ function updateOptimization(){
     ];
 
 
-    setText(
-        "priceOptimization",
-        money(priceProfit)
-    );
-
-    setText(
-        "costOptimization",
-        money(costProfit)
-    );
-
-    setText(
-        "refundOptimization",
-        money(refundProfit)
-    );
-
-    setText(
-        "adOptimization",
-        money(adProfit)
-    );
-
-    setText(
-        "shippingOptimization",
-        money(shippingProfit)
-    );
+    document.getElementById(
+        "priceOptimization"
+    ).textContent =
+        money(priceProfit);
 
 
-    setText(
-        "priceIncrease",
+    document.getElementById(
+        "costOptimization"
+    ).textContent =
+        money(costProfit);
+
+
+    document.getElementById(
+        "refundOptimization"
+    ).textContent =
+        money(refundProfit);
+
+
+    document.getElementById(
+        "adOptimization"
+    ).textContent =
+        money(adProfit);
+
+
+    document.getElementById(
+        "shippingOptimization"
+    ).textContent =
+        money(shippingProfit);
+
+
+    document.getElementById(
+        "priceIncrease"
+    ).textContent =
         "每单增加 " +
-        money(priceProfit - d.profit)
-    );
+        money(priceProfit - d.profit);
 
-    setText(
-        "costIncrease",
+
+    document.getElementById(
+        "costIncrease"
+    ).textContent =
         "每单增加 " +
-        money(costProfit - d.profit)
-    );
+        money(costProfit - d.profit);
 
-    setText(
-        "refundIncrease",
+
+    document.getElementById(
+        "refundIncrease"
+    ).textContent =
         "每单增加 " +
-        money(refundProfit - d.profit)
-    );
+        money(refundProfit - d.profit);
 
-    setText(
-        "adIncrease",
+
+    document.getElementById(
+        "adIncrease"
+    ).textContent =
         "每单增加 " +
-        money(adProfit - d.profit)
-    );
+        money(adProfit - d.profit);
 
-    setText(
-        "shippingIncrease",
+
+    document.getElementById(
+        "shippingIncrease"
+    ).textContent =
         "每单增加 " +
-        money(shippingProfit - d.profit)
-    );
+        money(shippingProfit - d.profit);
 
 
-    options.sort(
-        (a,b) =>
-            b.profit - a.profit
-    );
+    options.sort(function(a,b){
+
+        return b.profit -
+               a.profit;
+
+    });
 
 
     const best =
@@ -3314,7 +2827,8 @@ function updateOptimization(){
 
 
     const increase =
-        best.profit - d.profit;
+        best.profit -
+        d.profit;
 
 
     document.getElementById(
@@ -3322,7 +2836,7 @@ function updateOptimization(){
     ).innerHTML =
 
         "💡 当前最值得优化：<strong>" +
-        escapeHTML(best.name) +
+        best.name +
         "</strong><br>" +
 
         "预计每单利润增加 <strong>" +
@@ -3339,39 +2853,24 @@ function updateOptimization(){
             "🔴 当前不建议扩大销量。第一目标是先把单件模型做到盈利。";
 
     }
-
     else if(d.margin < 10){
 
         advice =
             "🟠 当前利润较薄，建议先优化成本，再考虑放量。";
 
     }
-
     else if(d.margin < 20){
 
         advice =
             "🟡 当前可以经营，但建议继续寻找采购、广告和退款率的优化空间。";
 
     }
-
     else{
 
         advice =
             "🟢 当前利润结构不错，可以考虑增加销量，同时保持广告效率。";
 
     }
-
-
-    const dailyGain =
-        increase * d.dailySales;
-
-
-    advice +=
-        "<br>📈 按当前日销量 " +
-        d.dailySales +
-        " 单计算，该优化方向理论上每天可增加约 " +
-        money(dailyGain) +
-        " 利润。";
 
 
     document.getElementById(
@@ -3388,51 +2887,28 @@ function updateOptimization(){
 
 function updateOverview(){
 
-    let d;
+    const d =
+        calculateProduct(
+            getCurrentData()
+        );
 
 
-    if(currentSKUId){
-
-        const sku =
-            skuList.find(
-                item => item.id === currentSKUId
-            );
+    document.getElementById(
+        "overviewProfit"
+    ).textContent =
+        money(d.profit);
 
 
-        if(sku){
-
-            d =
-                calculateSKU(sku);
-
-        }
-
-    }
+    document.getElementById(
+        "overviewMargin"
+    ).textContent =
+        d.margin.toFixed(2) + "%";
 
 
-    if(!d){
-
-        d =
-            calculateProduct(
-                getCurrentData()
-            );
-
-    }
-
-
-    setText(
-        "overviewProfit",
-        money(d.profit)
-    );
-
-    setText(
-        "overviewMargin",
-        d.margin.toFixed(2) + "%"
-    );
-
-    setText(
-        "overviewROI",
-        d.roi.toFixed(2)
-    );
+    document.getElementById(
+        "overviewROI"
+    ).textContent =
+        d.roi.toFixed(2);
 
 
     let status;
@@ -3453,7 +2929,6 @@ function updateOverview(){
         );
 
     }
-
     else if(d.margin < 10){
 
         status =
@@ -3467,7 +2942,6 @@ function updateOverview(){
         );
 
     }
-
     else if(d.margin < 20){
 
         status =
@@ -3477,7 +2951,6 @@ function updateOverview(){
             "商品可以继续经营，但仍存在优化空间。";
 
     }
-
     else{
 
         status =
@@ -3498,8 +2971,10 @@ function updateOverview(){
     }
 
 
-    if(d.price > 0 &&
-       d.adCost / d.price > .20){
+    if(
+        d.price > 0 &&
+        d.adCost / d.price > .20
+    ){
 
         risks.push(
             "广告费用占成交额超过 20%"
@@ -3508,8 +2983,10 @@ function updateOverview(){
     }
 
 
-    if(d.price > 0 &&
-       d.cost / d.price > .50){
+    if(
+        d.price > 0 &&
+        d.cost / d.price > .50
+    ){
 
         risks.push(
             "采购成本占售价超过 50%"
@@ -3518,104 +2995,34 @@ function updateOverview(){
     }
 
 
-    setText(
-        "overviewStatus",
-        status
-    );
+    document.getElementById(
+        "overviewStatus"
+    ).textContent =
+        status;
 
-    setText(
-        "overviewAdvice",
-        advice
-    );
+
+    document.getElementById(
+        "overviewAdvice"
+    ).textContent =
+        advice;
 
 
     document.getElementById(
         "overviewRisk"
     ).innerHTML =
         risks.length
+
             ? risks.map(
                 item =>
                     "<li>" +
-                    escapeHTML(item) +
+                    item +
                     "</li>"
-              ).join("")
+            ).join("")
+
             : "<li>暂无明显经营风险</li>";
 
 
-    health(d);
-
     updateSKUSummary();
-
-}
-
-
-/* =====================================================
-   全局刷新
-===================================================== */
-
-function refreshAllUI(){
-
-    renderSKU();
-
-    syncProfitSelect();
-
-    syncOptimizationSelect();
-
-    calculateAll();
-
-    updateOverview();
-
-    updateOptimization();
-
-}
-
-
-/* =====================================================
-   切换到指定页面
-===================================================== */
-
-function switchToPageByName(page){
-
-    const pages =
-        document.querySelectorAll(".page");
-
-    pages.forEach(
-        el => el.classList.remove("active")
-    );
-
-
-    document.getElementById(page)
-        .classList.add("active");
-
-
-    const buttons =
-        document.querySelectorAll(".nav button");
-
-
-    buttons.forEach(
-        el => el.classList.remove("active")
-    );
-
-
-    const index = {
-
-        overview:0,
-
-        profit:1,
-
-        sku:2,
-
-        optimization:3
-
-    }[page];
-
-
-    if(index !== undefined &&
-       buttons[index]){
-
-        buttons[index].classList.add("active");
-
-    }
 
 }
 
@@ -3634,10 +3041,10 @@ function init(){
 
     calculateAll();
 
-    updateOverview();
-
 }
 
+
+/* 启动 */
 
 init();
 
@@ -3645,4 +3052,3 @@ init();
 
 </body>
 </html>
-```
